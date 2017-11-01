@@ -56,6 +56,18 @@ Initializes a message-digesting operation.
 |--------|------------------------|----------------|--------------|
 | status | [CK_RV](#return-value) | uint 32        | Return value |
 
+**Applicable Mechanism Codes**
+
+- `CKM_MD2`
+- `CKM_MD5`
+- `CKM_SHA_1`
+- `CKM_RIPEMD128`
+- `CKM_RIPEMD160`
+- `CKM_SHA256`
+- `CKM_SHA224`
+- `CKM_SHA384`
+- `CKM_SHA512`
+
 #### Digest
 
 Digests data in a single part.
