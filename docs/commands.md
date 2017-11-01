@@ -9,6 +9,11 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 - [Encryption Functions](#encryption-functions)
 - [Decryption Functions](#decryption-functions)
 - [Message digesting Functions](#message-digesting-functions)
+    - [Digest Init](#digest-init)
+    - [Digest](#digest)
+    - [Digest Update](#digest-update)
+    - [Digest Key](#digest-key)
+    - [Digest Final](#digest-final)
 - [Signing and MACing Functions](#signing-and-macing-functions)
 - [Functions for Verifying signatures and MACs](#functions-for-verifying-signatures-and-macs)
 - [Dual-function Cryptographic Functions](#dual-function-cryptographic-functions)
@@ -27,7 +32,17 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 
 ### Decryption Functions
 
-### Message digesting Functions
+### Message Digesting Functions
+
+#### Digest Init
+
+#### Digest
+
+#### Digest Update
+
+#### Digest Key
+
+#### Digest Final
 
 ### Signing and MACing Functions
 
