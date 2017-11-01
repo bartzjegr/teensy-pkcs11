@@ -48,6 +48,7 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 | parameter | byte array        | bin 8/16        | optional parameter |
 
 **Response**
+
 | Name   | Type                   | Representation | Description  |
 |--------|------------------------|----------------|--------------|
 | status | [CK_RV](#return-value) | uint 32        | Return value |
