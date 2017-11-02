@@ -24,7 +24,19 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
         - [Digest Key](#digest-key)
         - [Digest Final](#digest-final)
     - [Signing and MACing Functions](#signing-and-macing-functions)
+        - [Sign Init](#sign-init)
+        - [Sign](#sign)
+        - [Sign Update](#sign-update)
+        - [Sign Final](#sign-final)
+        - [Sign Recover Init](#sign-recover-init)
+        - [Sign Recover](#sign-recover)
     - [Functions for Verifying signatures and MACs](#functions-for-verifying-signatures-and-macs)
+        - [Verify Init](#verify-init)
+        - [Verify](#verify)
+        - [Verify Update](#verify-update)
+        - [Verify Final](#verify-final)
+        - [Verify Recover Init](#verify-recover-init)
+        - [Verify Recover](#verify-recover)
     - [Dual-function Cryptographic Functions](#dual-function-cryptographic-functions)
     - [Key Management Functions](#key-management-functions)
     - [Random Number Generation Functions](#random-number-generation-functions)
@@ -253,7 +265,31 @@ Finishes a multiple-part message-digesting operation, returning the message dige
 
 ### Signing and MACing Functions
 
+#### Sign Init
+
+#### Sign
+
+#### Sign Update
+
+#### Sign Final
+
+#### Sign Recover Init
+
+#### Sign Recover
+
 ### Functions for Verifying signatures and MACs
+
+#### Verify Init
+
+#### Verify
+
+#### Verify Update
+
+#### Verify Final
+
+#### Verify Recover Init
+
+#### Verify Recover
 
 ### Dual-function Cryptographic Functions
 
