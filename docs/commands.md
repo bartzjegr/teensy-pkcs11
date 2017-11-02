@@ -48,7 +48,7 @@ Initializes a message-digesting operation.
 |-----------|---------------------------------------|-----------------|--------------------|
 | hSession  | CK_SESSION_HANDLE                     | positive fixint | Session handle     |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 32         | Digest mechanism   |
-| parameter | byte array                            | bin 8/16        | Optional parameter |
+| parameter | byte array                            | bin 8/16/32     | Optional parameter |
 
 **Response**
 
@@ -77,7 +77,7 @@ Digests data in a single part.
 | Name      | Type                                  | Representation  | Description          |
 |-----------|---------------------------------------|-----------------|----------------------|
 | hSession  | CK_SESSION_HANDLE                     | positive fixint | Session handle       |
-| data      | byte array                            | bin 8/16        | Data to be processed |
+| data      | byte array                            | bin 8/16/32     | Data to be processed |
 
 **Response**
 
@@ -87,6 +87,21 @@ Digests data in a single part.
 | digest | byte array             | bin 8/16       | Digest of data |
 
 #### Digest Update
+
+Continues a multiple-part message-digesting operation, processing another data part.
+
+**Request**
+
+| Name      | Type                                  | Representation  | Description                  |
+|-----------|---------------------------------------|-----------------|------------------------------|
+| hSession  | CK_SESSION_HANDLE                     | positive fixint | Session handle               |
+| part      | byte array                            | bin 8/16/32     | Part of data to be processed |
+
+**Response**
+
+| Name   | Type                   | Representation | Description    |
+|--------|------------------------|----------------|----------------|
+| status | [CK_RV](#return-value) | uint 32        | Return value   |
 
 #### Digest Key
 
