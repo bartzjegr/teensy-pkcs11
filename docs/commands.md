@@ -74,17 +74,17 @@ Digests data in a single part.
 
 **Request**
 
-| Name      | Type                                  | Representation  | Description          |
-|-----------|---------------------------------------|-----------------|----------------------|
-| hSession  | CK_SESSION_HANDLE                     | positive fixint | Session handle       |
-| data      | byte array                            | bin 8/16/32     | Data to be processed |
+| Name      | Type              | Representation  | Description          |
+|-----------|-------------------|-----------------|----------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32    | Session handle       |
+| data      | octet-stream      | bin 8/16/32     | Data to be processed |
 
 **Response**
 
 | Name   | Type                   | Representation | Description    |
 |--------|------------------------|----------------|----------------|
-| status | [CK_RV](#return-value) | uint 32        | Return value   |
-| digest | byte array             | bin 8/16       | Digest of data |
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| digest | octet-stream           | bin 8/16       | Digest of data |
 
 #### Digest Update
 
@@ -92,18 +92,33 @@ Continues a multiple-part message-digesting operation, processing another data p
 
 **Request**
 
-| Name      | Type                                  | Representation  | Description                  |
-|-----------|---------------------------------------|-----------------|------------------------------|
-| hSession  | CK_SESSION_HANDLE                     | positive fixint | Session handle               |
-| part      | byte array                            | bin 8/16/32     | Part of data to be processed |
+| Name      | Type              | Representation  | Description                  |
+|-----------|-------------------|-----------------|------------------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32    | Session handle               |
+| part      | octet-stream      | bin 8/16/32     | Part of data to be processed |
 
 **Response**
 
 | Name   | Type                   | Representation | Description    |
 |--------|------------------------|----------------|----------------|
-| status | [CK_RV](#return-value) | uint 32        | Return value   |
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
 
 #### Digest Key
+
+Continues a multiple-part message-digesting operation by digesting the value of a secret key.
+
+**Request**
+
+| Name      | Type              | Representation  | Description    |
+|-----------|-------------------|-----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32    | Session handle |
+| hKey      | CK_OBJECT_HANDLE  | uint 8/16/32    | Key handle     |
+
+**Response**
+
+| Name   | Type                   | Representation | Description    |
+|--------|------------------------|----------------|----------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
 
 #### Digest Final
 
