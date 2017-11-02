@@ -40,7 +40,8 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 
 #### Digest Init
 
-Initializes a message-digesting operation.
+Initializes a message-digesting operation. After calling [DigestInit](#digest-init), the application can either call [Digest](#digest) to digest data in a single part; or call [DigestUpdate](#digest-update) zero or more times, followed by [DigestFinal](#digest-final), to digest data in multiple parts. The message-digesting operation is active until the application uses a call to [Digest](#digest) or [DigestFinal](#digest-final) to actually obtain the message digest. To process additional data (in single or multiple parts), the application must call [DigestInit](#digest-init) again.
+
 
 **Request**
 
@@ -56,7 +57,7 @@ Initializes a message-digesting operation.
 |--------|------------------------|----------------|--------------|
 | status | [CK_RV](#return-value) | uint 32        | Return value |
 
-**Applicable Mechanism Codes**
+**Mechanism Codes**
 
 - `CKM_MD2`
 - `CKM_MD5`
@@ -68,9 +69,30 @@ Initializes a message-digesting operation.
 - `CKM_SHA384`
 - `CKM_SHA512`
 
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
+
+
 #### Digest
 
-Digests data in a single part.
+Digests data in a single part. The digest operation must have been initialized with [DigestInit](#digest-init). A call to [Digest](#digest) always terminates the active digest operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the message digest. [Digest](#digest) can not be used to terminate a multi-part operation, and must be called after [DigestInit](#digest-init) without intervening [DigestUpdate](#digest-update) calls. [Digest](#digest) is equivalent to a sequence of [DigestUpdate](#digest-update) operations followed by [DigestFinal](#digest-final).
 
 **Request**
 
@@ -86,9 +108,26 @@ Digests data in a single part.
 | status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
 | digest | octet-stream           | bin 8/16       | Digest of data |
 
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 #### Digest Update
 
-Continues a multiple-part message-digesting operation, processing another data part.
+Continues a multiple-part message-digesting operation, processing another data part. The message-digesting operation must have been initialized with [DigestInit](#digest-init). Calls to this function and [DigestKey](#digest-key) may be interspersed any number of times in any order. A call to [DigestUpdate](#digest-update) which results in an error terminates the current digest operation.
 
 **Request**
 
@@ -103,9 +142,25 @@ Continues a multiple-part message-digesting operation, processing another data p
 |--------|------------------------|----------------|----------------|
 | status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
 
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 #### Digest Key
 
-Continues a multiple-part message-digesting operation by digesting the value of a secret key.
+Continues a multiple-part message-digesting operation by digesting the value of a secret key. The message-digesting operation must have been initialized with [DigestInit](#digest-init). Calls to this function and [DigestUpdate](#digest-update) may be interspersed any number of times in any order. If the value of the supplied key cannot be digested purely for some reason related to its length, [DigestKey](#digest-key) should return the error code `CKR_KEY_SIZE_RANGE`.
 
 **Request**
 
@@ -120,7 +175,57 @@ Continues a multiple-part message-digesting operation by digesting the value of 
 |--------|------------------------|----------------|----------------|
 | status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
 
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_HANDLE_INVALID`
+- `CKR_KEY_INDIGESTIBLE`
+- `CKR_KEY_SIZE_RANGE`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 #### Digest Final
+
+Finishes a multiple-part message-digesting operation, returning the message digest. The digest operation must have been initialized with [DigestInit](#digest-init). A call to [DigestFinal](#digest-final) always terminates the active digest operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the message digest.
+
+**Request**
+
+| Name      | Type              | Representation  | Description          |
+|-----------|-------------------|-----------------|----------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32    | Session handle       |
+
+**Response**
+
+| Name   | Type                   | Representation | Description    |
+|--------|------------------------|----------------|----------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| digest | octet-stream           | bin 8/16       | Digest of data |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
 
 ### Signing and MACing Functions
 
