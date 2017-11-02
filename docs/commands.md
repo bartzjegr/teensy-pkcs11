@@ -8,7 +8,15 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
     - [Session Management Functions](#session-management-functions)
     - [Object Management Functions](#object-management-functions)
     - [Encryption Functions](#encryption-functions)
+        - [Encrypt Init](#encrypt-init)
+        - [Encrypt](#encrypt)
+        - [Encrypt Update](#encrypt-update)
+        - [Encrypt Final](#encrypt-final)
     - [Decryption Functions](#decryption-functions)
+        - [Decrypt Init](#decrypt-init)
+        - [Decrypt](#decrypt)
+        - [Decrypt Update](#decrypt-update)
+        - [Decrypt Final](#decrypt-final)
     - [Message digesting Functions](#message-digesting-functions)
         - [Digest Init](#digest-init)
         - [Digest](#digest)
@@ -34,7 +42,23 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 
 ### Encryption Functions
 
+#### Encrypt Init
+
+#### Encrypt
+
+#### Encrypt Update
+
+#### Encrypt Final
+
 ### Decryption Functions
+
+#### Decrypt Init
+
+#### Decrypt
+
+#### Decrypt Update
+
+#### Decrypt Final
 
 ### Message Digesting Functions
 
