@@ -293,10 +293,10 @@ For most mechanisms, [Encrypt](#encrypt) is equivalent to a sequence of [Encrypt
 
 **Response**
 
-| Name          | Type                   | Representation | Description          |
-|---------------|------------------------|----------------|----------------------|
-| status        | [CK_RV](#return-value) | uint 8/16/32   | Return value         |
-| encryptedData | byte array             | bin 8/16/32    | Data to be encrypted |
+| Name          | Type                   | Representation | Description    |
+|---------------|------------------------|----------------|----------------|
+| status        | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| encryptedData | byte array             | bin 8/16/32    | Encrypted data |
 
 **Error Codes**
 
@@ -559,7 +559,63 @@ For most mechanisms, [Decrypt](#decrypt) is equivalent to a sequence of [Decrypt
 
 **Error Codes**
 
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_ENCRYPTED_DATA_INVALID`
+- `CKR_ENCRYPTED_DATA_LEN_RANGE`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
+
 #### Decrypt Update
+
+Continues a multiple-part decryption operation, processing another encrypted data part.
+
+The decryption operation must have been initialized with [DecryptInit](#decrypt-init). This function may be called any number of times in succession. A call to [DecryptUpdate](#decrypt-update) which results in an error other than `CKR_BUFFER_TOO_SMALL` terminates the current decryption operation.
+
+**Request**
+
+| Name          | Type              | Representation | Description         |
+|---------------|-------------------|----------------|---------------------|
+| hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle      |
+| encryptedPart | byte array        | bin 8/16/32    | Encrypted data part |
+
+**Response**
+
+| Name   | Type                   | Representation | Description         |
+|--------|------------------------|----------------|---------------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
+| part   | byte array             | bin 8/16/32    | Decrypted data part |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_ENCRYPTED_DATA_INVALID`
+- `CKR_ENCRYPTED_DATA_LEN_RANGE`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
 
 #### Decrypt Final
 
