@@ -79,12 +79,29 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
     - [Return Value](#return-value)
     - [Mechanism Codes](#mechanism-codes)
     - [Attributes](#attributes)
+    - [Flags](#flags)
 
 ## Functions
 
 ### Slot and Token Management Functions
 
 #### Get Slot Info
+
+Obtains information about a particular slot in the system.
+
+**Request**
+
+None
+
+**Response**
+
+| Name            | Type               | Representation | Description                            |
+|-----------------|--------------------|----------------|----------------------------------------|
+| slotDescription | octet-stream       | bin 8          | slot description (64 chars)            |
+| manufacturerID  | octet-stream       | bin 8          | manufacturer identification (32 chars) |
+| flags           | CK_FLAGS           | uint 8/16/32   | Token [flags](#flags)                  |
+| hardwareVersion | (CK_BYTE, CK_BYTE) | fixarray       | Hardware version (major, minor)        |
+| firmwareVersion | (CK_BYTE, CK_BYTE) | fixarray       | Firmware version (major, minor)        |
 
 #### Get Token Info
 
@@ -1522,3 +1539,30 @@ Possible values of `CK_ATTRIBUTE_TYPE`
 | `CKA_SUPPORTED_CMS_ATTRIBUTES`        | 0x00000503                        |
 | `CKA_ALLOWED_MECHANISMS`              | (CKF_ARRAY_ATTRIBUTE&#124;0x00000600)  |
 | `CKA_VENDOR_DEFINED`                  | 0x80000000                        |
+
+### flags
+
+Possible values of `CK_FLAGS`
+
+| Code                     | Value      |
+|--------------------------|------------|
+| `CKF_HW`                 | 0x00000001 |
+| `CKF_ENCRYPT`            | 0x00000100 |
+| `CKF_DECRYPT`            | 0x00000200 |
+| `CKF_DIGEST`             | 0x00000400 |
+| `CKF_SIGN`               | 0x00000800 |
+| `CKF_SIGN_RECOVER`       | 0x00001000 |
+| `CKF_VERIFY`             | 0x00002000 |
+| `CKF_VERIFY_RECOVER`     | 0x00004000 |
+| `CKF_GENERATE`           | 0x00008000 |
+| `CKF_GENERATE_KEY_PAIR`  | 0x00010000 |
+| `CKF_WRAP`               | 0x00020000 |
+| `CKF_UNWRAP`             | 0x00040000 |
+| `CKF_DERIVE`             | 0x00080000 |
+| `CKF_EC_F_P`             | 0x00100000 |
+| `CKF_EC_F_2M`            | 0x00200000 |
+| `CKF_EC_ECPARAMETERS`    | 0x00400000 |
+| `CKF_EC_NAMEDCURVE`      | 0x00800000 |
+| `CKF_EC_UNCOMPRESS`      | 0x01000000 |
+| `CKF_EC_COMPRESS`        | 0x02000000 |
+| `CKF_EXTENSION`          | 0x80000000 |
