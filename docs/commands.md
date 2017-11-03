@@ -402,6 +402,7 @@ For some multi-part encryption mechanisms, the input plaintext data has certain 
 Initializes a decryption operation.
 
 The `CKA_DECRYPT` attribute of the decryption key, which indicates whether the key supports decryption, must be `CK_TRUE`.
+
 After calling [DecryptInit](#decrypt-init), the application can either call [Decrypt](#decrypt) to decrypt data in a single part; or call [DecryptUpdate](#decrypt-update) zero or more times, followed by [DecryptFinal](#decrypt-final), to decrypt data in multiple parts. The decryption operation is active until the application uses a call to [Decrypt](#decrypt) or [DecryptFinal](#decrypt-final) to actually obtain the final piece of plaintext. To process additional data (in single or multiple parts), the application must call [DecryptInit](#decrypt-init) again
 
 **Request**
