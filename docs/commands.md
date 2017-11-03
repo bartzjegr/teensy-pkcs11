@@ -848,9 +848,9 @@ A call to [DigestFinal](#digest-final) always terminates the active digest opera
 
 **Request**
 
-| Name      | Type              | Representation | Description          |
-|-----------|-------------------|----------------|----------------------|
-| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle       |
+| Name      | Type              | Representation | Description    |
+|-----------|-------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
 
 **Response**
 
@@ -929,6 +929,40 @@ A call to [DigestFinal](#digest-final) always terminates the active digest opera
 ### Random Number Generation Functions
 
 #### Seed Random
+
+Mixes additional seed material into the token's random number generator.
+
+**Request**
+
+| Name      | Type              | Representation | Description          |
+|-----------|-------------------|----------------|----------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle       |
+| seed      | octet-stream      | bin 8/16       | Random seed material |
+
+**Response**
+
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_RANDOM_SEED_NOT_SUPPORTED`
+- `CKR_RANDOM_NO_RNG`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
 
 #### Generate Random
 
