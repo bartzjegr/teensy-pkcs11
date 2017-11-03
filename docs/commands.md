@@ -144,12 +144,12 @@ Initializes an encryption operation. The `CKA_ENCRYPT` attribute of the encrypti
 
 **Request**
 
-| Name      | Type                                  | Representation  | Description        |
-|-----------|---------------------------------------|-----------------|--------------------|
-| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32    | Session handle     |
-| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32    | Cipher mechanism   |
-| parameter | byte array                            | bin 8/16/32     | Optional parameter |
-| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32    | Key Handle         |
+| Name      | Type                                  | Representation | Description        |
+|-----------|---------------------------------------|----------------|--------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism   |
+| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
 
 **Response**
 
@@ -270,6 +270,42 @@ Initializes an encryption operation. The `CKA_ENCRYPT` attribute of the encrypti
 
 #### Encrypt
 
+Encrypts single-part data. The encryption operation must have been initialized with [EncryptInit](#encrypt-init). A call to [Encrypt](#encrypt) always terminates the active encryption operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the ciphertext. [Encrypt](#encrypt) can not be used to terminate a multi-part operation, and must be called after [EncryptInit](#encrypt-init) without intervening [EncryptUpdate](#encrypt-update) calls. For some encryption mechanisms, the input plaintext data has certain length constraints (either because the mechanism can only encrypt relatively short pieces of plaintext, or because the mechanism's input data must consist of an integral number of blocks). If these constraints are not satisfied, then [Encrypt](#encrypt) will fail with return code `CKR_DATA_LEN_RANGE`. The plaintext and ciphertext can be in the same place, i.e., it is OK if pData and pEncryptedData point to the same location. For most mechanisms, [Encrypt](#encrypt) is equivalent to a sequence of [EncryptUpdate](#encrypt-update) operations followed by [EncryptFinal](#encrypt-final).
+
+**Request**
+
+| Name      | Type                                  | Representation | Description          |
+|-----------|---------------------------------------|----------------|----------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle       |
+| data      | byte array                            | bin 8/16/32    | Data to be encrypted |
+
+**Response**
+
+| Name          | Type                   | Representation | Description          |
+|---------------|------------------------|----------------|----------------------|
+| status        | [CK_RV](#return-value) | uint 32        | Return value         |
+| encryptedData | byte array             | bin 8/16/32    | Data to be encrypted |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_INVALID`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
+
 #### Encrypt Update
 
 #### Encrypt Final
@@ -292,11 +328,11 @@ Initializes a message-digesting operation. After calling [DigestInit](#digest-in
 
 **Request**
 
-| Name      | Type                                  | Representation  | Description        |
-|-----------|---------------------------------------|-----------------|--------------------|
-| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32    | Session handle     |
-| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32    | Digest mechanism   |
-| parameter | byte array                            | bin 8/16/32     | Optional parameter |
+| Name      | Type                                  | Representation | Description        |
+|-----------|---------------------------------------|----------------|--------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Digest mechanism   |
+| parameter | byte array                            | bin 8/16/32    | Optional parameter |
 
 **Response**
 
@@ -378,10 +414,10 @@ Continues a multiple-part message-digesting operation, processing another data p
 
 **Request**
 
-| Name      | Type              | Representation  | Description                  |
-|-----------|-------------------|-----------------|------------------------------|
-| hSession  | CK_SESSION_HANDLE | uint 8/16/32    | Session handle               |
-| part      | octet-stream      | bin 8/16/32     | Part of data to be processed |
+| Name      | Type              | Representation | Description                  |
+|-----------|-------------------|----------------|------------------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle               |
+| part      | octet-stream      | bin 8/16/32    | Part of data to be processed |
 
 **Response**
 
@@ -446,9 +482,9 @@ Finishes a multiple-part message-digesting operation, returning the message dige
 
 **Request**
 
-| Name      | Type              | Representation  | Description          |
-|-----------|-------------------|-----------------|----------------------|
-| hSession  | CK_SESSION_HANDLE | uint 8/16/32    | Session handle       |
+| Name      | Type              | Representation | Description          |
+|-----------|-------------------|----------------|----------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle       |
 
 **Response**
 
