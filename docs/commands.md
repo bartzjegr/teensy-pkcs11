@@ -533,6 +533,32 @@ After calling [DecryptInit](#decrypt-init), the application can either call [Dec
 
 #### Decrypt
 
+Decrypts encrypted data in a single part.
+
+The decryption operation must have been initialized with [DecryptInit](#decrypt-init). A call to [Decrypt](#decrypt) always terminates the active decryption operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the plaintext.
+
+[Decrypt](#decrypt) can not be used to terminate a multi-part operation, and must be called after [DecryptInit](#decrypt-init) without intervening [DecryptUpdate](#decrypt-update) calls.
+
+If the input ciphertext data cannot be decrypted because it has an inappropriate length, then either `CKR_ENCRYPTED_DATA_INVALID` or `CKR_ENCRYPTED_DATA_LEN_RANGE` may be returned.
+
+For most mechanisms, [Decrypt](#decrypt) is equivalent to a sequence of [DecryptUpdate](#decrypt-update) operations followed by [DecryptFinal](#decrypt-final).
+
+**Request**
+
+| Name          | Type              | Representation | Description          |
+|---------------|-------------------|----------------|----------------------|
+| hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle       |
+| encryptedData | byte array        | bin 8/16/32    | Data to be decrypted |
+
+**Response**
+
+| Name          | Type                   | Representation | Description          |
+|---------------|------------------------|----------------|----------------------|
+| status        | [CK_RV](#return-value) | uint 8/16/32   | Return value         |
+| data          | byte array             | bin 8/16/32    | Decrypted data       |
+
+**Error Codes**
+
 #### Decrypt Update
 
 #### Decrypt Final
