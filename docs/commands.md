@@ -95,15 +95,72 @@ None
 
 **Response**
 
-| Name            | Type               | Representation | Description                            |
-|-----------------|--------------------|----------------|----------------------------------------|
-| slotDescription | octet-stream       | bin 8          | slot description (64 chars)            |
-| manufacturerID  | octet-stream       | bin 8          | manufacturer identification (32 chars) |
-| flags           | CK_FLAGS           | uint 8/16/32   | Token [flags](#flags)                  |
-| hardwareVersion | (CK_BYTE, CK_BYTE) | fixarray       | Hardware version (major, minor)        |
-| firmwareVersion | (CK_BYTE, CK_BYTE) | fixarray       | Firmware version (major, minor)        |
+| Name            | Type                   | Representation | Description                            |
+|-----------------|------------------------|----------------|----------------------------------------|
+| status          | [CK_RV](#return-value) | uint 8/16/32   | Return value                           |
+| slotDescription | octet-stream           | bin 8          | slot description (64 chars)            |
+| manufacturerID  | octet-stream           | bin 8          | manufacturer identification (32 chars) |
+| flags           | CK_FLAGS               | uint 8/16/32   | Token [flags](#flags)                  |
+| hardwareVersion | (CK_BYTE, CK_BYTE)     | fixarray       | Hardware version (major, minor)        |
+| firmwareVersion | (CK_BYTE, CK_BYTE)     | fixarray       | Firmware version (major, minor)        |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_SLOT_ID_INVALID`
 
 #### Get Token Info
+
+Obtains information about a particular token in the system.
+
+**Request**
+
+None
+
+**Response**
+
+| Name                  | Type                   | Representation | Description                                  |
+|-----------------------|------------------------|----------------|----------------------------------------------|
+| status                | [CK_RV](#return-value) | uint 8/16/32   | Return value                                 |
+| label                 | octet-stream           | bin 8          | Token slot label (32 chars)                  |
+| manufacturerID        | octet-stream           | bin 8          | Token manufacturer identification (32 chars) |
+| model                 | octet-stream           | bin 8          | Token model (16 bytes)                       |
+| serialNumber          | octet-stream           | bin 8          | Token serial number (16 bytes)               |
+| flags                 | CK_FLAGS               | uint 8/16/32   | Token [flags](#flags)                        |
+| ulMaxSessionCount     | CK_ULONG               | uint 8/16/32   | Maximum session count                        |
+| ulSessionCount        | CK_ULONG               | uint 8/16/32   | Number of open session                       |
+| ulMaxRwSessionCount   | CK_ULONG               | uint 8/16/32   | Maximum number of read/write sessions that can be opened with the token at one time     |  
+| ulRwSessionCount      | CK_ULONG               | uint 8/16/32   | Number of read/write sessions that this application currently has open with the token   |
+| ulMaxPinLen           | CK_ULONG               | uint 8/16/32   | Maximum length in bytes of the PIN                                                      |
+| ulMinPinLen           | CK_ULONG               | uint 8/16/32   | Minimum length in bytes of the PIN                                                      |
+| ulTotalPublicMemory   | CK_ULONG               | uint 8/16/32   | The total amount of memory on the token in bytes in which public objects may be stored  |
+| ulFreePublicMemory    | CK_ULONG               | uint 8/16/32   | The amount of free (unused) memory on the token in bytes for public objects             |
+| ulTotalPrivateMemory  | CK_ULONG               | uint 8/16/32   | The total amount of memory on the token in bytes in which private objects may be stored |
+| ulFreePrivateMemory   | CK_ULONG               | uint 8/16/32   | The amount of free (unused) memory on the token in bytes for private objects            |
+| hardwareVersion       | (CK_BYTE, CK_BYTE)     | fixarray       | Version number of hardware.                   |
+| firmwareVersion       | (CK_BYTE, CK_BYTE)     | fixarray       | Version number of firmware.                   |
+| utcTime               | octet-stream           | bin 8          | Current time as a character-string of length 16, represented in the format YYYYMMDDhhmmssxx (4 characters for the year; 2 characters each for the month, the day, the hour, the minute, and the second; and 2 additional reserved '0' characters) |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_SLOT_ID_INVALID`
+- `CKR_TOKEN_NOT_PRESENT`
+- `CKR_TOKEN_NOT_RECOGNIZED`
+- `CKR_ARGUMENTS_BAD`
 
 #### Get Mechanism List
 
@@ -1540,7 +1597,7 @@ Possible values of `CK_ATTRIBUTE_TYPE`
 | `CKA_ALLOWED_MECHANISMS`              | (CKF_ARRAY_ATTRIBUTE&#124;0x00000600)  |
 | `CKA_VENDOR_DEFINED`                  | 0x80000000                        |
 
-### flags
+### Flags
 
 Possible values of `CK_FLAGS`
 
