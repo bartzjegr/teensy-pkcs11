@@ -1012,9 +1012,9 @@ Possible values of `CK_ATTRIBUTE_TYPE`
 | `CKA_ALWAYS_AUTHENTICATE`             | 0x00000202                        |
 | `CKA_AUTH_PIN_FLAGS`                  | 0x00000201                        |
 | `CKA_WRAP_WITH_TRUSTED`               | 0x00000210                        |
-| `CKA_WRAP_TEMPLATE`                   | (CKF_ARRAY_ATTRIBUTE|0x00000211)  |
-| `CKA_UNWRAP_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE|0x00000212)  |
-| `CKA_DERIVE_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE|0x00000213)  |
+| `CKA_WRAP_TEMPLATE`                   | (CKF_ARRAY_ATTRIBUTE&#124;0x00000211)  |
+| `CKA_UNWRAP_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE&#124;0x00000212)  |
+| `CKA_DERIVE_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE&#124;0x00000213)  |
 | `CKA_OTP_FORMAT`                      | 0x00000220                        |
 | `CKA_OTP_LENGTH`                      | 0x00000221                        |
 | `CKA_OTP_TIME_INTERVAL`               | 0x00000222                        |
@@ -1049,5 +1049,5 @@ Possible values of `CK_ATTRIBUTE_TYPE`
 | `CKA_REQUIRED_CMS_ATTRIBUTES`         | 0x00000501                        |
 | `CKA_DEFAULT_CMS_ATTRIBUTES`          | 0x00000502                        |
 | `CKA_SUPPORTED_CMS_ATTRIBUTES`        | 0x00000503                        |
-| `CKA_ALLOWED_MECHANISMS`              | (CKF_ARRAY_ATTRIBUTE|0x00000600)  |
+| `CKA_ALLOWED_MECHANISMS`              | (CKF_ARRAY_ATTRIBUTE&#124;0x00000600)  |
 | `CKA_VENDOR_DEFINED`                  | 0x80000000                        |
