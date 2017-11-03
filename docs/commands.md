@@ -159,7 +159,7 @@ After calling [EncryptInit](#encrypt-init), the application can either call [Enc
 
 | Name   | Type                   | Representation | Description  |
 |--------|------------------------|----------------|--------------|
-| status | [CK_RV](#return-value) | uint 32        | Return value |
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
 
 **Mechanism Codes**
 
@@ -286,16 +286,16 @@ For most mechanisms, [Encrypt](#encrypt) is equivalent to a sequence of [Encrypt
 
 **Request**
 
-| Name      | Type                                  | Representation | Description          |
-|-----------|---------------------------------------|----------------|----------------------|
-| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle       |
-| data      | byte array                            | bin 8/16/32    | Data to be encrypted |
+| Name      | Type              | Representation | Description          |
+|-----------|-------------------|----------------|----------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle       |
+| data      | byte array        | bin 8/16/32    | Data to be encrypted |
 
 **Response**
 
 | Name          | Type                   | Representation | Description          |
 |---------------|------------------------|----------------|----------------------|
-| status        | [CK_RV](#return-value) | uint 32        | Return value         |
+| status        | [CK_RV](#return-value) | uint 8/16/32   | Return value         |
 | encryptedData | byte array             | bin 8/16/32    | Data to be encrypted |
 
 **Error Codes**
@@ -335,7 +335,7 @@ The encryption operation must have been initialized with [EncryptInit](#encrypt-
 
 | Name          | Type                   | Representation | Description            |
 |---------------|------------------------|----------------|------------------------|
-| status        | [CK_RV](#return-value) | uint 32        | Return value           |
+| status        | [CK_RV](#return-value) | uint 8/16/32   | Return value           |
 | encryptedPart | byte array             | bin 8/16/32    | Encrypted part of data |
 
 **Error Codes**
@@ -374,7 +374,7 @@ For some multi-part encryption mechanisms, the input plaintext data has certain 
 
 | Name              | Type                   | Representation | Description                 |
 |-------------------|------------------------|----------------|-----------------------------|
-| status            | [CK_RV](#return-value) | uint 32        | Return value                |
+| status            | [CK_RV](#return-value) | uint 8/16/32   | Return value                |
 | lastEncryptedPart | byte array             | bin 8/16/32    | Last encrypted part of data |
 
 **Error Codes**
@@ -398,6 +398,137 @@ For some multi-part encryption mechanisms, the input plaintext data has certain 
 ### Decryption Functions
 
 #### Decrypt Init
+
+Initializes a decryption operation.
+
+The `CKA_DECRYPT` attribute of the decryption key, which indicates whether the key supports decryption, must be `CK_TRUE`.
+After calling [DecryptInit](#decrypt-init), the application can either call [Decrypt](#decrypt) to decrypt data in a single part; or call [DecryptUpdate](#decrypt-update) zero or more times, followed by [DecryptFinal](#decrypt-final), to decrypt data in multiple parts. The decryption operation is active until the application uses a call to [Decrypt](#decrypt) or [DecryptFinal](#decrypt-final) to actually obtain the final piece of plaintext. To process additional data (in single or multiple parts), the application must call [DecryptInit](#decrypt-init) again
+
+**Request**
+
+| Name      | Type                                  | Representation | Description        |
+|-----------|---------------------------------------|----------------|--------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism   |
+| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
+
+**Response**
+
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/18/32   | Return value |
+
+**Mechanism Codes**
+
+- `CKM_RSA_PKCS`
+- `CKM_RSA_PKCS_OAEP`
+- `CKM_RSA_X_509`
+- `CKM_RC2_ECB`
+- `CKM_RC2_CBC`
+- `CKM_RC2_CBC_PAD`
+- `CKM_RC4`
+- `CKM_DES_ECB`
+- `CKM_DES_CBC`
+- `CKM_DES_CBC_PAD`
+- `CKM_DES3_ECB`
+- `CKM_DES3_CBC`
+- `CKM_DES3_CBC_PAD`
+- `CKM_CDMF_ECB`
+- `CKM_CDMF_CBC`
+- `CKM_CDMF_CBC_PAD`
+- `CKM_DES_OFB64`
+- `CKM_DES_OFB8`
+- `CKM_DES_CFB64`
+- `CKM_DES_CFB8`
+- `CKM_CAST_ECB`
+- `CKM_CAST_CBC`
+- `CKM_CAST_CBC_PAD`
+- `CKM_CAST3_KEY_GEN`
+- `CKM_CAST3_ECB`
+- `CKM_CAST3_CBC`
+- `CKM_CAST3_CBC_PAD`
+- `CKM_CAST5_ECB`
+- `CKM_CAST128_ECB`
+- `CKM_CAST5_CBC`
+- `CKM_CAST128_CBC`
+- `CKM_CAST5_CBC_PAD`
+- `CKM_CAST128_CBC_PAD`
+- `CKM_RC5_ECB`
+- `CKM_RC5_CBC`
+- `CKM_RC5_CBC_PAD`
+- `CKM_IDEA_ECB`
+- `CKM_IDEA_CBC`
+- `CKM_IDEA_CBC_PAD`
+- `CKM_CAMELLIA_ECB`
+- `CKM_CAMELLIA_CBC`
+- `CKM_CAMELLIA_MAC`
+- `CKM_CAMELLIA_CBC_PAD`
+- `CKM_CAMELLIA_CTR`
+- `CKM_ARIA_ECB`
+- `CKM_ARIA_CBC`
+- `CKM_ARIA_CBC_PAD`
+- `CKM_SEED_ECB`
+- `CKM_SEED_CBC`
+- `CKM_SEED_CBC_PAD`
+- `CKM_SKIPJACK_ECB64`
+- `CKM_SKIPJACK_CBC64`
+- `CKM_SKIPJACK_OFB64`
+- `CKM_SKIPJACK_CFB64`
+- `CKM_SKIPJACK_CFB32`
+- `CKM_SKIPJACK_CFB16`
+- `CKM_SKIPJACK_CFB8`
+- `CKM_BATON_ECB128`
+- `CKM_BATON_ECB96`
+- `CKM_BATON_CBC128`
+- `CKM_BATON_COUNTER`
+- `CKM_BATON_SHUFFLE`
+- `CKM_JUNIPER_ECB128`
+- `CKM_JUNIPER_CBC128`
+- `CKM_JUNIPER_COUNTER`
+- `CKM_JUNIPER_SHUFFLE`
+- `CKM_AES_ECB`
+- `CKM_AES_CBC`
+- `CKM_AES_CBC_PAD`
+- `CKM_AES_CTR`
+- `CKM_AES_CTS`
+- `CKM_BLOWFISH_CBC`
+- `CKM_TWOFISH_CBC`
+- `CKM_AES_GCM`
+- `CKM_AES_CCM`
+- `CKM_BLOWFISH_CBC_PAD`
+- `CKM_TWOFISH_CBC_PAD`
+- `CKM_GOST28147_ECB`
+- `CKM_GOST28147`
+- `CKM_AES_OFB`
+- `CKM_AES_CFB64`
+- `CKM_AES_CFB8`
+- `CKM_AES_CFB128`
+- `CKM_RSA_PKCS_TPM_1_1`
+- `CKM_RSA_PKCS_OAEP_TPM_1_1`
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_FUNCTION_NOT_PERMITTED`
+- `CKR_KEY_HANDLE_INVALID`
+- `CKR_KEY_SIZE_RANGE`
+- `CKR_KEY_TYPE_INCONSISTENT`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
 
 #### Decrypt
 
