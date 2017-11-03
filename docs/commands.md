@@ -144,11 +144,7 @@ Initializes an encryption operation.
 
 The `CKA_ENCRYPT` attribute of the encryption key, which indicates whether the key supports encryption, must be `CK_TRUE`.
 
-After calling [EncryptInit](#encrypt-init), the application can either call [Encrypt](#encrypt) to encrypt data in a single part; or call [EncryptUpdate](#encrypt-update) zero or more times, followed by [EncryptFinal](#encrypt-final), to encrypt data in multiple parts.
-
-The encryption operation is active until the application uses a call to [Encrypt](#encrypt) or [EncryptFinal](#encrypt-final) to actually obtain the final piece of ciphertext.
-
-To process additional data (in single or multiple parts), the application must call [EncryptInit](#encrypt-init) again.
+After calling [EncryptInit](#encrypt-init), the application can either call [Encrypt](#encrypt) to encrypt data in a single part; or call [EncryptUpdate](#encrypt-update) zero or more times, followed by [EncryptFinal](#encrypt-final), to encrypt data in multiple parts. The encryption operation is active until the application uses a call to [Encrypt](#encrypt) or [EncryptFinal](#encrypt-final) to actually obtain the final piece of ciphertext. To process additional data (in single or multiple parts), the application must call [EncryptInit](#encrypt-init) again.
 
 **Request**
 
@@ -280,9 +276,7 @@ To process additional data (in single or multiple parts), the application must c
 
 Encrypts single-part data.
 
-The encryption operation must have been initialized with [EncryptInit](#encrypt-init).
-
-A call to [Encrypt](#encrypt) always terminates the active encryption operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the ciphertext.
+The encryption operation must have been initialized with [EncryptInit](#encrypt-init). A call to [Encrypt](#encrypt) always terminates the active encryption operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the ciphertext.
 
 [Encrypt](#encrypt) can not be used to terminate a multi-part operation, and must be called after [EncryptInit](#encrypt-init) without intervening [EncryptUpdate](#encrypt-update) calls.
 
@@ -328,24 +322,21 @@ For most mechanisms, [Encrypt](#encrypt) is equivalent to a sequence of [Encrypt
 
 Continues a multiple-part encryption operation, processing another data part.
 
-The encryption operation must have been initialized with C_EncryptInit.
-
-This function may be called any number of times in succession.
-
-A call to [EncryptUpdate](#encrypt-update) which results in an error other than `CKR_BUFFER_TOO_SMALL` terminates the current encryption operation.
+The encryption operation must have been initialized with [EncryptInit](#encrypt-init). This function may be called any number of times in succession. A call to [EncryptUpdate](#encrypt-update) which results in an error other than `CKR_BUFFER_TOO_SMALL` terminates the current encryption operation.
 
 **Request**
 
-| Name      | Type                                  | Representation | Description               |
-|-----------|---------------------------------------|----------------|---------------------------|
-| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle            |
-| part      | byte array                            | bin 8/16/32    | Data part to be encrypted |
+| Name      | Type              | Representation | Description               |
+|-----------|-------------------|----------------|---------------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle            |
+| part      | byte array        | bin 8/16/32    | Data part to be encrypted |
 
 **Response**
 
-| Name          | Type                   | Representation | Description  |
-|---------------|------------------------|----------------|--------------|
-| status        | [CK_RV](#return-value) | uint 32        | Return value |
+| Name          | Type                   | Representation | Description            |
+|---------------|------------------------|----------------|------------------------|
+| status        | [CK_RV](#return-value) | uint 32        | Return value           |
+| encryptedPart | byte array             | bin 8/16/32    | Encrypted part of data |
 
 **Error Codes**
 
@@ -365,8 +356,44 @@ A call to [EncryptUpdate](#encrypt-update) which results in an error other than 
 - `CKR_SESSION_CLOSED`
 - `CKR_SESSION_HANDLE_INVALID`
 
-
 #### Encrypt Final
+
+Finishes a multiple-part encryption operation.
+
+The encryption operation must have been initialized with [EncryptInit](#encrypt-init). A call to [EncryptFinal](#encrypt-final) always terminates the active encryption operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the ciphertext.
+
+For some multi-part encryption mechanisms, the input plaintext data has certain length constraints, because the mechanism's input data must consist of an integral number of blocks. If these constraints are not satisfied, then [EncryptFinal](#encrypt-final) will fail with return code `CKR_DATA_LEN_RANGE`.
+
+**Request**
+
+| Name      | Type              | Representation | Description    |
+|-----------|-------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
+
+**Response**
+
+| Name              | Type                   | Representation | Description                 |
+|-------------------|------------------------|----------------|-----------------------------|
+| status            | [CK_RV](#return-value) | uint 32        | Return value                |
+| lastEncryptedPart | byte array             | bin 8/16/32    | Last encrypted part of data |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
 
 ### Decryption Functions
 
