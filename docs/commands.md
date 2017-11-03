@@ -5,8 +5,32 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 ## Table Of Contents
 - [Functions](#functions)
     - [Slot and Token Management Functions](#slot-and-token-management-functions)
+        - [Get Slot Info](#get-slot-info)
+        - [Get Token Info](#get-token-info)
+        - [Get Mechanism List](#get-mechanism-list)
+        - [Get Mechanism Info](#get-mechanism-info)
+        - [Init Token](#init-token)
+        - [Init PIN](#init-pin)
+        - [Set PIN](#set-pin)
     - [Session Management Functions](#session-management-functions)
+        - [Open Session](#open-session)
+        - [Close Session](#close-session)
+        - [Close All Sessions](#close-all-sessions)
+        - [Get Session Info](#get-session-info)
+        - [Get Operation State](#get-operation-state)
+        - [Set Operation State](#set-operation-state)
+        - [Login](#login)
+        - [Logout](#logout)
     - [Object Management Functions](#object-management-functions)
+        - [Create Object](#create-object)
+        - [Copy Object](#copy-object)
+        - [Destroy Object](#destroy-object)
+        - [Get Object Size](#get-object-size)
+        - [Get Attribute Value](#get-attribute-value)
+        - [Set Attribute Value](#set-attribute-value)
+        - [Find Objects Init](#find-objects-init)
+        - [Find Objects](#find-objects)
+        - [Find Objects Final](#find-objects-final)
     - [Encryption Functions](#encryption-functions)
         - [Encrypt Init](#encrypt-init)
         - [Encrypt](#encrypt)
@@ -38,8 +62,19 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
         - [Verify Recover Init](#verify-recover-init)
         - [Verify Recover](#verify-recover)
     - [Dual-function Cryptographic Functions](#dual-function-cryptographic-functions)
+        - [Digest Encrypt Update](#digest-encrypt-update)
+        - [Decrypt Digest Update](#decrypt-digest-update)
+        - [Sign Encrypt Update](#sign-encrypt-update)
+        - [Decrypt Verify Update](#decrypt-verify-update)
     - [Key Management Functions](#key-management-functions)
+        - [Generate Key](#generate-key)
+        - [Generate Key Pair](#generate-key-pair)
+        - [Wrap Key](#wrap-key)
+        - [Unwrap Key](#unwrap-key)
+        - [Derive Key](#derive-key)
     - [Random Number Generation Functions](#random-number-generation-functions)
+        - [Seed Random](#seed-random)
+        - [Generate Random](#generate-random)
 - [Types](#types)
     - [Return Value](#return-value)
     - [Mechanism Codes](#mechanism-codes)
@@ -48,9 +83,57 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 
 ### Slot and Token Management Functions
 
+#### Get Slot Info
+
+#### Get Token Info
+
+#### Get Mechanism List
+
+#### Get Mechanism Info
+
+#### Init Token
+
+#### Init PIN
+
+#### Set PIN
+
 ### Session Management Functions
 
+#### Open Session
+
+#### Close Session
+
+#### Close All Sessions
+
+#### Get Session Info
+
+#### Get Operation State
+
+#### Set Operation State
+
+#### Login
+
+#### Logout
+
 ### Object Management Functions
+
+#### Create Object
+
+#### Copy Object
+
+#### Destroy Object
+
+#### Get Object Size
+
+#### Get Attribute Value
+
+#### Set Attribute Value
+
+#### Find Objects Init
+
+#### Find Objects
+
+#### Find Objects Final
 
 ### Encryption Functions
 
@@ -293,9 +376,31 @@ Finishes a multiple-part message-digesting operation, returning the message dige
 
 ### Dual-function Cryptographic Functions
 
+#### Digest Encrypt Update
+
+#### Decrypt Digest Update
+
+#### Sign Encrypt Update
+
+#### Decrypt Verify Update
+
 ### Key Management Functions
 
+#### Generate Key
+
+#### Generate Key Pair
+
+#### Wrap Key
+
+#### Unwrap Key
+
+#### Derive Key
+
 ### Random Number Generation Functions
+
+#### Seed Random
+
+#### Generate Random
 
 ## Types
 
