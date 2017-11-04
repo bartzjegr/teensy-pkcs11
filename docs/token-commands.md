@@ -81,6 +81,7 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
     - [Attributes](#attributes)
     - [Flags](#flags)
     - [States](#states)
+    - [User Types](#user-types)
 
 ## Functions
 
@@ -579,6 +580,55 @@ An application can look at the `CKF_RESTORE_KEY_NOT_NEEDED` flag in the flags fi
 - `CKR_ARGUMENTS_BAD`
 
 #### Login
+
+Logs a user into a token.
+
+When the user type is either `CKU_SO` or `CKU_USER`, if the call succeeds, each of the application's sessions will enter either the "R/W SO Functions" state, the "R/W User Functions" state, or the "R/O User Functions" state. If the user type is `CKU_CONTEXT_SPECIFIC` , the behavior of [Login](#login) depends on the context in which it is called. Improper use of this user type will result in a return value `CKR_OPERATION_NOT_INITIALIZED`.
+
+If there are any active cryptographic or object finding operations in an application's session, and then [Login](#login) is successfully executed by that application, it may or may not be the case that those operations are still active. Therefore, before logging in, any active operations should be finished.
+
+If the application calling [Login](#login) has a R/O session open with the token, then it will be unable to log the SO into a session. An attempt to do this will result in the error code `CKR_SESSION_READ_ONLY_EXISTS`.
+
+[Login](#login) may be called repeatedly, without intervening [Logout](#logout) calls, if (and only if) a key with the `CKA_ALWAYS_AUTHENTICATE` attribute set to `CK_TRUE` exists, and the user needs to do cryptographic operation on this key.
+
+**Request**
+
+| Name     | Type                        | Representation | Description    |
+|----------|-----------------------------|----------------|----------------|
+| hSession | CK_SESSION_HANDLE           | uint 8/16/32   | Session handle |
+| userType | [CK_USER_TYPE](#user-types) | uint 8/16/32   | User type      |
+| pin      | octet-stream                | bin 8/16/32    | User PIN       |
+
+**Response**
+
+| Name           | Type                   | Representation | Description                |
+|----------------|------------------------|----------------|----------------------------|
+| status         | [CK_RV](#return-value) | uint 8/16/32   | Return value               |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_PIN_INCORRECT`
+- `CKR_PIN_LOCKED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY_EXISTS`
+- `CKR_USER_ALREADY_LOGGED_IN`
+- `CKR_USER_ANOTHER_ALREADY_LOGGED_IN`
+- `CKR_USER_PIN_NOT_INITIALIZED`
+- `CKR_USER_TOO_MANY_TYPES`
+- `CKR_USER_TYPE_INVALID`
+
 
 #### Logout
 
@@ -2027,3 +2077,13 @@ Possible values of `CK_STATE`
 | `CKS_RW_PUBLIC_SESSION`  | 2     |
 | `CKS_RW_USER_FUNCTIONS`  | 3     |
 | `CKS_RW_SO_FUNCTIONS`    | 4     |
+
+### User Types
+
+Possible value of `CK_USER_TYPE`
+
+| Code                     | Value |
+|--------------------------|-------|
+| CKU_SO                   | 0     |
+| CKU_USER                 | 1     |
+| CKU_CONTEXT_SPECIFIC     | 2     |
