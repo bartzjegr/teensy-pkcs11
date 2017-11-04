@@ -1572,6 +1572,41 @@ For most mechanisms, [Sign](#sign) is equivalent to a sequence of [SignUpdate](#
 
 #### Sign Update
 
+continues a multiple-part signature operation, processing another data part.
+
+The signature operation must have been initialized with [SignInit](#sign-init). This function may be called any number of times in succession. A call to [SignUpdate](#sign-update) which results in an error terminates the current signature operation.
+
+**Request**
+
+| Name      | Type              | Representation | Description            |
+|-----------|-------------------|----------------|------------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle         |
+| part      | byte array        | bin 8/16/32    | Data part to be signed |
+
+**Response**
+
+| Name      | Type                   | Representation | Description    |
+|-----------|------------------------|----------------|----------------|
+| status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
+
 #### Sign Final
 
 #### Sign Recover Init
