@@ -80,6 +80,7 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
     - [Mechanism Codes](#mechanism-codes)
     - [Attributes](#attributes)
     - [Flags](#flags)
+    - [States](#states)
 
 ## Functions
 
@@ -462,6 +463,36 @@ None
 - `CKR_TOKEN_NOT_PRESENT`
 
 #### Get Session Info
+
+Obtains information about a session.
+
+**Request**
+
+| Name     | Type               | Representation | Description    |
+|----------|--------------------|----------------|----------------|
+| hSession | CK_SESSION_HANDLE  | uint 8/16/32   | Session handle |
+
+**Response**
+
+| Name   | Type                   | Representation | Description    |
+|--------|------------------------|----------------|----------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| state  | [CK_STATE](#states)    | uint 8/16/32   | Session state  |
+| flags  | [CK_FLAGS](#flags)     | uint 8/16/32   | Bit flags that define the type of session |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_ARGUMENTS_BAD`
 
 #### Get Operation State
 
@@ -1904,3 +1935,15 @@ Possible values of `CK_FLAGS`
 | `CKF_EC_UNCOMPRESS`      | 0x01000000 |
 | `CKF_EC_COMPRESS`        | 0x02000000 |
 | `CKF_EXTENSION`          | 0x80000000 |
+
+### States
+
+Possible values of `CK_STATE`
+
+| Code                     | Value |
+|--------------------------|-------|
+| `CKS_RO_PUBLIC_SESSION`  | 0     |
+| `CKS_RO_USER_FUNCTIONS`  | 1     |
+| `CKS_RW_PUBLIC_SESSION`  | 2     |
+| `CKS_RW_USER_FUNCTIONS`  | 3     |
+| `CKS_RW_SO_FUNCTIONS`    | 4     |
