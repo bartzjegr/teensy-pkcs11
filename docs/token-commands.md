@@ -1775,12 +1775,12 @@ After calling [VerifyInit](#verify-init), the application can either call [Verif
 
 **Request**
 
-| Name      | Type                                  | Representation | Description                        |
-|-----------|---------------------------------------|----------------|------------------------------------|
-| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle                     |
-| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signinature Verification mechanism |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter                 |
-| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle                         |
+| Name      | Type                                  | Representation | Description                      |
+|-----------|---------------------------------------|----------------|----------------------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle                   |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signature Verification mechanism |
+| parameter | byte array                            | bin 8/16/32    | Optional parameter               |
+| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle                       |
 
 **Response**
 
@@ -2020,6 +2020,51 @@ A successful call to [VerifyFinal](#verify-final) should return either the value
 - `CKR_SIGNATURE_LEN_RANGE`
 
 #### Verify Recover Init
+
+Initializes a signature verification operation, where the data is recovered from the signature.
+
+The `CKA_VERIFY_RECOVER` attribute of the verification key, which indicates whether the key supports verification where the data is recovered from the signature, must be `CK_TRUE`.
+
+After calling [VerifyRecoverInit](#verify-recover-init), the application may call [VerifyRecover](#verify-recover) to verify a signature on data in a single part. The verification operation is active until the application uses a call to [VerifyRecover](#verify-recover) to actually obtain the recovered message.
+
+**Request**
+
+| Name      | Type                                  | Representation | Description                      |
+|-----------|---------------------------------------|----------------|----------------------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle                   |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signature Verification mechanism |
+| parameter | byte array                            | bin 8/16/32    | Optional parameter               |
+| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle                       |
+
+**Response**
+
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_FUNCTION_NOT_PERMITTED`
+- `CKR_KEY_HANDLE_INVALID`
+- `CKR_KEY_SIZE_RANGE`
+- `CKR_KEY_TYPE_INCONSISTENT`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
 
 #### Verify Recover
 
