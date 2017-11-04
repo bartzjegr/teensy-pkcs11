@@ -496,6 +496,38 @@ Obtains information about a session.
 
 #### Get Operation State
 
+Obtains a copy of the cryptographic operations state of a session, encoded as a string of bytes. State serialization is mechanism specific. Refer to [Token State Serialization]("token-state-serialization.md") for more detail.
+
+**Request**
+
+| Name     | Type               | Representation | Description    |
+|----------|--------------------|----------------|----------------|
+| hSession | CK_SESSION_HANDLE  | uint 8/16/32   | Session handle |
+
+**Response**
+
+| Name           | Type                   | Representation | Description                |
+|----------------|------------------------|----------------|----------------------------|
+| status         | [CK_RV](#return-value) | uint 8/16/32   | Return value               |
+| operationState | octet-stream           | bin 8/16/32    | Serialized operation state |
+
+**Error Codes**
+
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_STATE_UNSAVEABLE`
+- `CKR_ARGUMENTS_BAD`
+
 #### Set Operation State
 
 #### Login
