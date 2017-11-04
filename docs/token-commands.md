@@ -2068,6 +2068,47 @@ After calling [VerifyRecoverInit](#verify-recover-init), the application may cal
 
 #### Verify Recover
 
+Verifies a signature in a single-part operation, where the data is recovered from the signature.
+
+The verification operation must have been initialized with [VerifyRecoverInit](#verify-recover-init). A call to [VerifyRecover](#verify-recover) always terminates the active verification operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the recovered data.
+
+A successful call to [VerifyRecover](#verify-recover) should return either the value `CKR_OK` (indicating that the supplied signature is valid) or `CKR_SIGNATURE_INVALID` (indicating that the supplied signature is invalid). If the signature can be seen to be invalid purely on the basis of its length, then `CKR_SIGNATURE_LEN_RANGE` should be returned. The return codes `CKR_SIGNATURE_INVALID` and `CKR_SIGNATURE_LEN_RANGE` have a higher priority than the return code `CKR_BUFFER_TOO_SMALL`, i.e., if [VerifyRecover](#verify-recover) is supplied with an invalid signature, it will never return `CKR_BUFFER_TOO_SMALL`.
+
+**Request**
+
+| Name      | Type              | Representation | Description    |
+|-----------|-------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
+| signature | byte array        | bin 8/16/32    | Data signature |
+
+**Response**
+
+| Name   | Type                   | Representation | Description    |
+|--------|------------------------|----------------|----------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| data   | byte array            | bin 8/16/32     | Data recovered |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_INVALID`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SIGNATURE_LEN_RANGE`
+- `CKR_SIGNATURE_INVALID`
+
 ### Dual-function Cryptographic Functions
 
 #### Digest Encrypt Update
