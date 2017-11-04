@@ -231,6 +231,52 @@ Obtains information about a particular mechanism possibly supported by a token.
 
 #### Init Token
 
+Initializes a token.
+
+If the token has not been initialized (i.e. new from the factory), then the `pin` parameter becomes the initial value of the `SO PIN`. If the token is being reinitialized, the `pin` parameter is checked against the existing `SO PIN` to authorize the initialization operation. In both cases, the `SO PIN` is the value `pin` after the function completes successfully. If the `SO PIN` is lost, then the card must be reinitialized using a mechanism outside the scope of this standard. The `CKF_TOKEN_INITIALIZED` flag in the `CK_TOKEN_INFO` structure indicates the action that will result from calling [InitToken](#init-token). If set, the token will be reinitialized, and the client must supply the existing SO password in `pin`.
+When a token is initialized, all objects that can be destroyed are destroyed (i.e., all except for "indestructible" objects such as keys built into the token). Also, access by the normal user is disabled until the SO sets the normal user's PIN. Depending on the token, some "default" objects may be created, and attributes of some objects may be set to default values.
+
+If the token has a "protected authentication path", as indicated by the `CKF_PROTECTED_AUTHENTICATION_PATH` flag in its `CK_TOKEN_INFO` being set, then that means that there is some way for a user to be authenticated to the token without having the application send a PIN through the Cryptoki library. One such possibility is that the user enters a PIN on a PINpad on the token itself, or on the slot device. To initialize a token with such a protected authentication path, the `pin` parameter to [InitToken](#init-token) should be `NULL_PTR`. During the execution of [InitToken](#init-token), the SO's PIN will be entered through the protected authentication path.
+
+If the token has a protected authentication path other than a PINpad, then it is token-dependent whether or not [InitToken](#init-token) can be used to initialize the token.
+
+A token cannot be initialized if Cryptoki detects that any application has an open session with it; when a call to [InitToken](#init-token) is made under such circumstances, the call fails with error `CKR_SESSION_EXISTS`. Unfortunately, it may happen when [InitToken](#init-token) is called that some other application does have an open session with the token, but Cryptoki cannot detect this, because it cannot detect anything about other applications using the token. If this is the case, then the consequences of the [InitToken](#init-token) call are undefined.
+
+The [InitToken](#init-token) function may not be sufficient to properly initialize complex tokens. In these situations, an initialization mechanism outside the scope of Cryptoki must be employed. The definition of "complex token" is product specific.
+
+**Request**
+
+| Name  | Type         | Representation | Description            |
+|-------|--------------|----------------|------------------------|
+| pin   | octet-stream | bin 8/16/32    | User PIN               |
+| label | octet-stream | bin 8/16/32    | Token tabel (32 chars) |
+
+**Response**
+
+| Name         | Type                   | Representation | Description  |
+|--------------|------------------------|----------------|--------------|
+| status       | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_PIN_INCORRECT`
+- `CKR_PIN_LOCKED`
+- `CKR_SESSION_EXISTS`
+- `CKR_SLOT_ID_INVALID`
+- `CKR_TOKEN_NOT_PRESENT`
+- `CKR_TOKEN_NOT_RECOGNIZED`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_ARGUMENTS_BAD`
+
 #### Init PIN
 
 #### Set PIN
