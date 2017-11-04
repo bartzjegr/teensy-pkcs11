@@ -196,6 +196,39 @@ None
 
 #### Get Mechanism Info
 
+Obtains information about a particular mechanism possibly supported by a token.
+
+**Request**
+
+| Name | Type                                  | Representation | Description           |
+|------|---------------------------------------|----------------|-----------------------|
+| type | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Mechanism identifier  |
+
+**Response**
+
+| Name         | Type                   | Representation | Description                                 |
+|--------------|------------------------|----------------|---------------------------------------------|
+| status       | [CK_RV](#return-value) | uint 8/16/32   | Return value                                |
+| ulMinKeySize | CK_ULONG               | uint 8/16/32   | The minimum size of the key for the mechanism (whether this is measured in bits or in bytes is mechanism-dependent) |
+| ulMaxKeySize | CK_ULONG               | uint 8/16/32   | The maximum size of the key for the mechanism (whether this is measured in bits or in bytes is mechanism-dependent) |
+| flags        | [CK_FLAGS](#flags)     | uint 8/16/32   | Bit flags specifying mechanism capabilities |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_MECHANISM_INVALID`
+- `CKR_OK`
+- `CKR_SLOT_ID_INVALID`
+- `CKR_TOKEN_NOT_PRESENT`
+- `CKR_TOKEN_NOT_RECOGNIZED`
+- `CKR_ARGUMENTS_BAD`
+
 #### Init Token
 
 #### Init PIN
