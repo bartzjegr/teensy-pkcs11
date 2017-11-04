@@ -353,6 +353,48 @@ Modifies the PIN of the user that is currently logged in, or the `CKU_USER PIN` 
 
 #### Open Session
 
+Opens a session between an application and a token in a particular slot.
+
+When opening a session with [OpenSession](#open-session), the flags parameter consists of the logical OR of zero or more bit flags defined in the `CK_SESSION_INFO` data type. For legacy reasons, the `CKF_SERIAL_SESSION` bit must always be set; if a call to [OpenSession](#open-session) does not have this bit set, the call should return unsuccessfully with the error code `CKR_SESSION_PARALLEL_NOT_SUPPORTED`.
+
+There may be a limit on the number of concurrent sessions an application may have with the token, which may depend on whether the session is "read-only" or "read/write". An attempt to open a session which does not succeed because there are too many existing sessions of some type should return `CKR_SESSION_COUNT`.
+
+If the token is write-protected (as indicated in the `CK_TOKEN_INFO` structure), then only read-only sessions may be opened with it.
+
+If the application calling [OpenSession](#open-session) already has a R/W SO session open with the token, then any attempt to open a R/O session with the token fails with error code `CKR_SESSION_READ_WRITE_SO_EXISTS`.
+
+**Request**
+
+| Name     | Type               | Representation | Description                |
+|----------|--------------------|----------------|----------------------------|
+| flags    | [CK_FLAGS](#flags) | uint 8/16/32   | Indicates type of session  |
+
+**Response**
+
+| Name         | Type                   | Representation | Description    |
+|--------------|------------------------|----------------|----------------|
+| status       | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| hSession     | CK_SESSION_HANDLE      | uint 8/16/32   | Session handle |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_SESSION_COUNT`
+- `CKR_SESSION_PARALLEL_NOT_SUPPORTED`
+- `CKR_SESSION_READ_WRITE_SO_EXISTS`
+- `CKR_SLOT_ID_INVALID`
+- `CKR_TOKEN_NOT_PRESENT`
+- `CKR_TOKEN_NOT_RECOGNIZED`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_ARGUMENTS_BAD`
+
 #### Close Session
 
 #### Close All Sessions
