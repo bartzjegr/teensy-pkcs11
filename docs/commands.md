@@ -320,6 +320,49 @@ If the token has a protected authentication path other than a PINpad, then it is
 
 #### Set PIN
 
+Modifies the PIN of the user that is currently logged in, or the `CKU_USER PIN` if the session is not logged in.
+
+[SetPIN](#set-pin) can only be called in the "R/W Public Session" state, "R/W SO Functions" state, or "R/W User Functions" state. An attempt to call it from a session in any other state fails with error `CKR_SESSION_READ_ONLY`.
+
+If the token has a "protected authentication path", as indicated by the `CKF_PROTECTED_AUTHENTICATION_PATH` flag in its `CK_TOKEN_INFO` being set, then that means that there is some way for a user to be authenticated to the token without having the application send a PIN through the Cryptoki library. One such possibility is that the user enters a PIN on a PINpad on the token itself, or on the slot device. To modify the current user's PIN on a token with such a protected authentication path, the `oldPin` and `newPin` parameters to [SetPIN](#set-pin) should be `NULL_PTR`. During the execution of [SetPIN](#set-pin), the current user will enter the old PIN and the new PIN through the protected authentication path. It is not specified how the PINpad should be used to enter two PINs; this varies.
+
+If the token has a protected authentication path other than a PINpad, then it is token-dependent whether or not [SetPIN](#set-pin) can be used to modify the current user's PIN.
+
+**Request**
+
+| Name     | Type              | Representation | Description     |
+|----------|-------------------|----------------|-----------------|
+| hSession | CK_SESSION_HANDLE | uint 8/16/32   | Session handle  |
+| oldPin   | octet-stream      | bin 8/16/32    | User old PIN    |
+| newPin   | octet-stream      | bin 8/16/32    | User new PIN    |
+
+**Response**
+
+| Name         | Type                   | Representation | Description  |
+|--------------|------------------------|----------------|--------------|
+| status       | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_PIN_INCORRECT`
+- `CKR_PIN_INVALID`
+- `CKR_PIN_LEN_RANGE`
+- `CKR_PIN_LOCKED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_ARGUMENTS_BAD`
+
 ### Session Management Functions
 
 #### Open Session
