@@ -279,6 +279,45 @@ The [InitToken](#init-token) function may not be sufficient to properly initiali
 
 #### Init PIN
 
+Initializes the normal user's PIN.
+
+If the token has a "protected authentication path", as indicated by the `CKF_PROTECTED_AUTHENTICATION_PATH` flag in its `CK_TOKEN_INFO` being set, then that means that there is some way for a user to be authenticated to the token without having the application send a PIN through the Cryptoki library. One such possibility is that the user enters a PIN on a PINpad on the token itself, or on the slot device. To initialize the normal user's PIN on a token with such a protected authentication path, the `pin` parameter to [InitPIN](#init-pin) should be `NULL_PTR`. During the execution of [InitPIN](#init-pin), the SO will enter the new PIN through the protected authentication path.
+
+If the token has a protected authentication path other than a PINpad, then it is token-dependent whether or not [InitPIN](#init-pin) can be used to initialize the normal user's token access.
+
+**Request**
+
+| Name     | Type              | Representation | Description     |
+|----------|-------------------|----------------|-----------------|
+| hSession | CK_SESSION_HANDLE | uint 8/16/32   | Session handle  |
+| pin      | octet-stream      | bin 8/16/32    | Normal user PIN |
+
+**Response**
+
+| Name         | Type                   | Representation | Description  |
+|--------------|------------------------|----------------|--------------|
+| status       | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_PIN_INVALID`
+- `CKR_PIN_LEN_RANGE`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_USER_NOT_LOGGED_IN`
+- `CKR_ARGUMENTS_BAD`
+
 #### Set PIN
 
 ### Session Management Functions
