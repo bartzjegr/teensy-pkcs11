@@ -1547,7 +1547,7 @@ For most mechanisms, [Sign](#sign) is equivalent to a sequence of [SignUpdate](#
 | Name      | Type                   | Representation | Description    |
 |-----------|------------------------|----------------|----------------|
 | status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| signature | byte array             | bin 8/16/32    | data signature |
+| signature | byte array             | bin 8/16/32    | Data signature |
 
 **Error Codes**
 
@@ -1624,7 +1624,7 @@ The signing operation must have been initialized with [SignInit](#sign-init). A 
 | Name      | Type                   | Representation | Description    |
 |-----------|------------------------|----------------|----------------|
 | status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| signature | byte array             | bin 8/16/32    | data signature |
+| signature | byte array             | bin 8/16/32    | Data signature |
 
 **Error Codes**
 
@@ -1692,8 +1692,45 @@ After calling [SignRecoverInit](#sign-recover-init), the application may call [S
 - `CKR_SESSION_HANDLE_INVALID`
 - `CKR_USER_NOT_LOGGED_IN`
 
-
 #### Sign Recover
+
+Signs data in a single operation, where the data can be recovered from the signature.
+
+The signing operation must have been initialized with [SignRecoverInit](#sign-recover-init). A call to [SignRecover](#sign-recover) always terminates the active signing operation unless it returns `CKR_BUFFER_TOO_SMALL` or is a successful call (i.e., one which returns `CKR_OK`) to determine the length of the buffer needed to hold the signature.
+
+**Request**
+
+| Name      | Type              | Representation | Description       |
+|-----------|-------------------|----------------|-------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle    |
+| data      | byte array        | bin 8/16/32    | Data to be signed |
+
+**Response**
+
+| Name      | Type                   | Representation | Description    |
+|-----------|------------------------|----------------|----------------|
+| status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| signature | byte array             | bin 8/16/32    | Data signature |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_INVALID`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
 
 ### Functions for Verifying signatures and MACs
 
