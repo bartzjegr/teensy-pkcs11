@@ -2153,6 +2153,57 @@ Digest and encryption operations must both be active (they must have been initia
 
 #### Decrypt Digest Update
 
+Continues a multiple-part combined decryption and digest operation, processing another data part.
+
+If a [DecryptDigestUpdate](#decrypt-digest-update) call does not produce decrypted output (because an error occurs, or because `part` has the value `NULL_PTR`), then no plaintext is passed to the active digest operation.
+
+Decryption and digesting operations must both be active (they must have been initialized with [DecryptInit](#decrypt-init) and [DigestInit](#digest-init), respectively). This function may be called any number of times in succession, and may be interspersed with [DecryptUpdate](#decrypt-update), [DigestUpdate](#digest-update), and [DigestKey](#digest-key) calls (it would be somewhat unusual to intersperse calls to [DecryptDigestUpdate](#decrypt-digest-update) with calls to [DigestKey](#digest-key), however).
+
+Use of [DecryptDigestUpdate](#decrypt-digest-update) involves a pipelining issue that does not arise when using [DigestEncryptUpdate](#digest-encrypt-update), the "inverse function" of [DecryptDigestUpdate](#decrypt-digest-update). This is because when [DigestEncryptUpdate](#digest-encrypt-update) is called, precisely the same input is passed to both the active digesting operation and the active encryption operation; however, when [DecryptDigestUpdate](#decrypt-digest-update) is called, the input passed to the active digesting operation is the output of the active decryption operation. This issue comes up only when the mechanism used for decryption performs padding.
+
+In particular, envision a 24-byte ciphertext which was obtained by encrypting an 18-byte plaintext with DES in CBC mode with PKCS padding. Consider an application which will simultaneously decrypt this ciphertext and digest the original plaintext thereby obtained.
+
+After initializing decryption and digesting operations, the application passes the 24-byte ciphertext (3 DES blocks) into [DecryptDigestUpdate](#decrypt-digest-update). [DecryptDigestUpdate](#decrypt-digest-update) returns exactly 16 bytes of plaintext, since at this point, Cryptoki doesn't know if there's more ciphertext coming, or if the last block of ciphertext held any padding. These 16 bytes of plaintext are passed into the active digesting operation.
+
+Since there is no more ciphertext, the application calls [DecryptFinal](#decrypt-final). This tells Cryptoki that there's no more ciphertext coming, and the call returns the last 2 bytes of plaintext. However, since the active decryption and digesting operations are linked only through the [DecryptDigestUpdate](#decrypt-digest-update) call, these 2 bytes of plaintext are not passed on to be digested.
+
+A call to [DigestFinal](#digest-final), therefore, would compute the message digest of the first 16 bytes of the plaintext, not the message digest of the entire plaintext. It is crucial that, before [DigestFinal](#digest-final) is called, the last 2 bytes of plaintext get passed into the active digesting operation via a [DigestUpdate](#digest-update) call.
+
+Because of this, it is critical that when an application uses a padded decryption mechanism with [DecryptDigestUpdate](#decrypt-digest-update), it knows exactly how much plaintext has been passed into the active digesting operation. Extreme caution is warranted when using a padded decryption mechanism with [DecryptDigestUpdate](#decrypt-digest-update).
+
+**Request**
+
+| Name          | Type              | Representation | Description         |
+|---------------|-------------------|----------------|---------------------|
+| hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle      |
+| encryptedPart | byte array        | bin 8/16/32    | Encrypted data part |
+
+**Response**
+
+| Name   | Type                   | Representation | Description         |
+|--------|------------------------|----------------|---------------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
+| part   | byte array             | bin 8/16/32    | Decrypted data part |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_ENCRYPTED_DATA_INVALID`
+- `CKR_ENCRYPTED_DATA_LEN_RANGE`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 #### Sign Encrypt Update
 
 #### Decrypt Verify Update
