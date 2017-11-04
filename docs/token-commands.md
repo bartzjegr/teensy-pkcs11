@@ -530,7 +530,7 @@ Obtains a copy of the cryptographic operations state of a session, encoded as a 
 
 #### Set Operation State
 
-Restores the cryptographic operations state of a session from a string of bytes obtained with [GetOperationState](#get-operation-state).
+Restores the cryptographic operations state of a session from a string of bytes obtained with [GetOperationState](#get-operation-state). Refer to [Token State Serialization](token-state-serialization.md) for more detail.
 
 If [SetOperationState](#set-operation-state) is supplied with alleged saved cryptographic operations state which it can determine is not valid saved state (or is cryptographic operations state from a session with a different session state, or is cryptographic operations state from a different token), it fails with the error `CKR_SAVED_STATE_INVALID`.
 
