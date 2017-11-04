@@ -41,7 +41,7 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
         - [Decrypt](#decrypt)
         - [Decrypt Update](#decrypt-update)
         - [Decrypt Final](#decrypt-final)
-    - [Message digesting Functions](#message-digesting-functions)
+    - [Message Digesting Functions](#message-digesting-functions)
         - [Digest Init](#digest-init)
         - [Digest](#digest)
         - [Digest Update](#digest-update)
@@ -1395,6 +1395,135 @@ A call to [DigestFinal](#digest-final) always terminates the active digest opera
 ### Signing and MACing Functions
 
 #### Sign Init
+
+Initializes a signature operation, where the signature is an appendix to the data.
+
+The `CKA_SIGN` attribute of the signature key, which indicates whether the key supports signatures with appendix, must be `CK_TRUE`.
+After calling [SignInit](#sign-init), the application can either call [Sign](#sign) to sign in a single part; or call [SignUpdate](#sign-update) one or more times, followed by [SignFinal](#sign-final), to sign data in multiple parts. The signature operation is active until the application uses a call to [Sign](#sign) or [SignFinal](#sign-final) to actually obtain the signature. To process additional data (in single or multiple parts), the application must call [SignInit](#sign-init) again.
+
+**Request**
+
+| Name      | Type                                  | Representation | Description        |
+|-----------|---------------------------------------|----------------|--------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signing mechanism   |
+| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
+
+**Response**
+
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Mechanism Codes**
+
+- `CKM_RSA_9796`
+- `CKM_MD2_RSA_PKCS`
+- `CKM_MD5_RSA_PKCS`
+- `CKM_SHA1_RSA_PKCS`
+- `CKM_RIPEMD128_RSA_PKCS`
+- `CKM_RIPEMD160_RSA_PKCS`
+- `CKM_RSA_X9_31`
+- `CKM_SHA1_RSA_X9_31`
+- `CKM_RSA_PKCS_PSS`
+- `CKM_SHA1_RSA_PKCS_PSS`
+- `CKM_DSA`
+- `CKM_DSA_SHA1`
+- `CKM_DSA_SHA224`
+- `CKM_DSA_SHA256`
+- `CKM_DSA_SHA384`
+- `CKM_DSA_SHA512`
+- `CKM_SHA256_RSA_PKCS`
+- `CKM_SHA384_RSA_PKCS`
+- `CKM_SHA512_RSA_PKCS`
+- `CKM_SHA256_RSA_PKCS_PSS`
+- `CKM_SHA384_RSA_PKCS_PSS`
+- `CKM_SHA512_RSA_PKCS_PSS`
+- `CKM_SHA224_RSA_PKCS`
+- `CKM_SHA224_RSA_PKCS_PSS`
+- `CKM_RC2_MAC`
+- `CKM_RC2_MAC_GENERAL`
+- `CKM_DES_MAC`
+- `CKM_DES_MAC_GENERAL`
+- `CKM_DES3_MAC`
+- `CKM_DES3_MAC_GENERAL`
+- `CKM_DES3_CMAC_GENERAL`
+- `CKM_DES3_CMAC`
+- `CKM_CDMF_MAC`
+- `CKM_CDMF_MAC_GENERAL`
+- `CKM_MD2_HMAC`
+- `CKM_MD2_HMAC_GENERAL`
+- `CKM_MD5_HMAC`
+- `CKM_MD5_HMAC_GENERAL`
+- `CKM_SHA_1_HMAC`
+- `CKM_SHA_1_HMAC_GENERAL`
+- `CKM_RIPEMD128_HMAC`
+- `CKM_RIPEMD128_HMAC_GENERAL`
+- `CKM_RIPEMD160_HMAC`
+- `CKM_RIPEMD160_HMAC_GENERAL`
+- `CKM_SHA256_HMAC`
+- `CKM_SHA256_HMAC_GENERAL`
+- `CKM_SHA224_HMAC`
+- `CKM_SHA224_HMAC_GENERAL`
+- `CKM_SHA384_HMAC`
+- `CKM_SHA384_HMAC_GENERAL`
+- `CKM_SHA512_HMAC`
+- `CKM_SHA512_HMAC_GENERAL`
+- `CKM_CAST_MAC`
+- `CKM_CAST_MAC_GENERAL`
+- `CKM_CAST3_MAC`
+- `CKM_CAST3_MAC_GENERAL`
+- `CKM_CAST5_MAC`
+- `CKM_CAST128_MAC`
+- `CKM_CAST5_MAC_GENERAL`
+- `CKM_CAST128_MAC_GENERAL`
+- `CKM_RC5_MAC`
+- `CKM_RC5_MAC_GENERAL`
+- `CKM_IDEA_MAC`
+- `CKM_IDEA_MAC_GENERAL`
+- `CKM_CAMELLIA_MAC`
+- `CKM_CAMELLIA_MAC_GENERAL`
+- `CKM_ARIA_MAC`
+- `CKM_ARIA_MAC_GENERAL`
+- `CKM_SEED_MAC`
+- `CKM_SEED_MAC_GENERAL`
+- `CKM_ECDSA`
+- `CKM_ECDSA_SHA1`
+- `CKM_ECDSA_SHA224`
+- `CKM_ECDSA_SHA256`
+- `CKM_ECDSA_SHA384`
+- `CKM_ECDSA_SHA512`
+- `CKM_AES_MAC`
+- `CKM_AES_MAC_GENERAL`
+- `CKM_AES_CMAC`
+- `CKM_AES_CMAC_GENERAL`
+- `CKM_GOSTR3411_HMAC`
+- `CKM_GOST28147_MAC`
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_FUNCTION_NOT_PERMITTED`
+- `CKR_KEY_HANDLE_INVALID`
+- `CKR_KEY_SIZE_RANGE`
+- `CKR_KEY_TYPE_INCONSISTENT`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
 
 #### Sign
 
