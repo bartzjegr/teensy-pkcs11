@@ -530,6 +530,54 @@ Obtains a copy of the cryptographic operations state of a session, encoded as a 
 
 #### Set Operation State
 
+Restores the cryptographic operations state of a session from a string of bytes obtained with [GetOperationState](#get-operation-state).
+
+If [SetOperationState](#set-operation-state) is supplied with alleged saved cryptographic operations state which it can determine is not valid saved state (or is cryptographic operations state from a session with a different session state, or is cryptographic operations state from a different token), it fails with the error `CKR_SAVED_STATE_INVALID`.
+
+Saved state obtained from calls to [GetOperationState](#get-operation-state) may or may not contain information about keys in use for ongoing cryptographic operations. If a saved cryptographic operations state has an ongoing encryption or decryption operation, and the key in use for the operation is not saved in the state, then it must be supplied to C_SetOperationState in the hEncryptionKey argument. If it is not, then [SetOperationState](#set-operation-state) will fail and return the error `CKR_KEY_NEEDED`. If the key in use for the operation is saved in the state, then it can be supplied in the hEncryptionKey argument, but this is not required.
+
+Similarly, if a saved cryptographic operations state has an ongoing signature, MACing, or verification operation, and the key in use for the operation is not saved in the state, then it must be supplied to [SetOperationState](#set-operation-state) in the `hAuthenticationKey` argument. If it is not, then [SetOperationState](#set-operation-state) will fail with the error `CKR_KEY_NEEDED`. If the key in use for the operation is saved in the state, then it can be supplied in the `hAuthenticationKey` argument, but this is not required.
+
+If an irrelevant key is supplied to [SetOperationState](#set-operation-state) call (e.g., a nonzero key handle is submitted in the hEncryptionKey argument, but the saved cryptographic operations state supplied does not have an ongoing encryption or decryption operation, then [SetOperationState](#set-operation-state) fails with the error `CKR_KEY_NOT_NEEDED`.
+
+If a key is supplied as an argument to [SetOperationState](#set-operation-state), and [SetOperationState](#set-operation-state) can somehow detect that this key was not the key being used in the source session for the supplied cryptographic operations state (it may be able to detect this if the key or a hash of the key is present in the saved state, for example), then [SetOperationState](#set-operation-state) fails with the error `CKR_KEY_CHANGED`.
+
+An application can look at the `CKF_RESTORE_KEY_NOT_NEEDED` flag in the flags field of the `CK_TOKEN_INFO` field for a token to determine whether or not it needs to supply key handles to [SetOperationState](#set-operation-state) calls. If this flag is true, then a call to [SetOperationState](#set-operation-state) never needs a key handle to be supplied to it. If this flag is false, then at least some of the time, [SetOperationState](#set-operation-state) requires a key handle, and so the application should probably always pass in any relevant key handles when restoring cryptographic operations state to a session.
+
+[SetOperationState](#set-operation-state) can successfully restore cryptographic operations state to a session even if that session has active cryptographic or object search operations when [SetOperationState](#set-operation-state) is called (the ongoing operations are abruptly cancelled).
+
+**Request**
+
+| Name               | Type              | Representation | Description                                                        |
+|--------------------|-------------------|----------------|--------------------------------------------------------------------|
+| hSession           | CK_SESSION_HANDLE | uint 8/16/32   | Session handle                                                     |
+| operationState     | octet-stream      | bin 8/16/32    | Serialized operation state                                         |
+| hEncryptionKey     | CK_OBJECT_HANDLE  | uint 8/16/32   | Encryption key handle (for encryption/decryption related state)    |
+| hAuthenticationKey | CK_OBJECT_HANDLE  | uint 8/16/32   | Authentication key handle (for signing/verification related state) |
+
+**Response**
+
+| Name           | Type                   | Representation | Description                |
+|----------------|------------------------|----------------|----------------------------|
+| status         | [CK_RV](#return-value) | uint 8/16/32   | Return value               |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_CHANGED`
+- `CKR_KEY_NEEDED`
+- `CKR_KEY_NOT_NEEDED`
+- `CKR_OK, CKR_SAVED_STATE_INVALID`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_ARGUMENTS_BAD`
+
 #### Login
 
 #### Logout
