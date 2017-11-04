@@ -601,9 +601,9 @@ If the application calling [Login](#login) has a R/O session open with the token
 
 **Response**
 
-| Name           | Type                   | Representation | Description                |
-|----------------|------------------------|----------------|----------------------------|
-| status         | [CK_RV](#return-value) | uint 8/16/32   | Return value               |
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
 
 **Error Codes**
 
@@ -629,8 +629,40 @@ If the application calling [Login](#login) has a R/O session open with the token
 - `CKR_USER_TOO_MANY_TYPES`
 - `CKR_USER_TYPE_INVALID`
 
-
 #### Logout
+
+Logs a user out from a token.
+
+Depending on the current user type, if the call succeeds, each of the application's sessions will enter either the "R/W Public Session" state or the "R/O Public Session" state.
+When [Logout](#logout) successfully executes, any of the application's handles to private objects become invalid (even if a user is later logged back into the token, those handles remain invalid). In addition, all private session objects from sessions belonging to the application are destroyed.
+
+If there are any active cryptographic or object-finding operations in an application's session, and then [Logout](#logout) is successfully executed by that application, it may or may not be the case that those operations are still active. Therefore, before logging out, any active operations should be finished.
+
+**Request**
+
+| Name     | Type              | Representation | Description    |
+|----------|-------------------|----------------|----------------|
+| hSession | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
+
+**Response**
+
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
 
 ### Object Management Functions
 
