@@ -2206,6 +2206,45 @@ Because of this, it is critical that when an application uses a padded decryptio
 
 #### Sign Encrypt Update
 
+Continues a multiple-part combined signature and encryption operation, processing another data part.
+
+If a [SignEncryptUpdate](#sign-encrypt-update) call does not produce encrypted output (because an error occurs, or because encryptedPart has the value `NULL_PTR`), then no plaintext is passed to the active signing operation.
+
+Signature and encryption operations must both be active (they must have been initialized with [SignInit](#sign-init) and [EncryptInit](#encrypt-init), respectively). This function may be called any number of times in succession, and may be interspersed with [SignUpdate](#sign-update) and [EncryptUpdate](#encrypt-update) calls.
+
+**Request**
+
+| Name      | Type              | Representation | Description               |
+|-----------|-------------------|----------------|---------------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle            |
+| part      | byte array        | bin 8/16/32    | Data part to be encrypted |
+
+**Response**
+
+| Name          | Type                   | Representation | Description            |
+|---------------|------------------------|----------------|------------------------|
+| status        | [CK_RV](#return-value) | uint 8/16/32   | Return value           |
+| encryptedPart | byte array             | bin 8/16/32    | Encrypted part of data |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
+
 #### Decrypt Verify Update
 
 ### Key Management Functions
