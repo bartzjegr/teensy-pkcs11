@@ -82,6 +82,7 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
     - [Flags](#flags)
     - [States](#states)
     - [User Types](#user-types)
+    - [Object Classes](#object-classes)
 
 ## Functions
 
@@ -174,10 +175,10 @@ None
 
  **Response**
 
- | Name            | Type                                           | Representation | Description                            |
- |-----------------|------------------------------------------------|----------------|----------------------------------------|
- | status          | [CK_RV](#return-value)                         | uint 8/16/32   | Return value                           |
- | slotDescription | array of [CK_MECHANISM_TYPE](#mechanism-codes) | array 8/16     | slot description (64 chars)            |
+ | Name       | Type                                           | Representation | Description        |
+ |------------|------------------------------------------------|----------------|--------------------|
+ | status     | [CK_RV](#return-value)                         | uint 8/16/32   | Return value       |
+ | mechanisms | array of [CK_MECHANISM_TYPE](#mechanism-codes) | array 8/16     | List of mechanisms |
 
  **Error Codes**
 
@@ -700,7 +701,7 @@ After calling [EncryptInit](#encrypt-init), the application can either call [Enc
 |-----------|---------------------------------------|----------------|--------------------|
 | hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism   |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
 | hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
 
 **Response**
@@ -837,14 +838,14 @@ For most mechanisms, [Encrypt](#encrypt) is equivalent to a sequence of [Encrypt
 | Name      | Type              | Representation | Description          |
 |-----------|-------------------|----------------|----------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle       |
-| data      | byte array        | bin 8/16/32    | Data to be encrypted |
+| data      | octet-stream      | bin 8/16/32    | Data to be encrypted |
 
 **Response**
 
 | Name          | Type                   | Representation | Description    |
 |---------------|------------------------|----------------|----------------|
 | status        | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| encryptedData | byte array             | bin 8/16/32    | Encrypted data |
+| encryptedData | octet-stream           | bin 8/16/32    | Encrypted data |
 
 **Error Codes**
 
@@ -877,14 +878,14 @@ The encryption operation must have been initialized with [EncryptInit](#encrypt-
 | Name      | Type              | Representation | Description               |
 |-----------|-------------------|----------------|---------------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle            |
-| part      | byte array        | bin 8/16/32    | Data part to be encrypted |
+| part      | octet-stream      | bin 8/16/32    | Data part to be encrypted |
 
 **Response**
 
 | Name          | Type                   | Representation | Description            |
 |---------------|------------------------|----------------|------------------------|
 | status        | [CK_RV](#return-value) | uint 8/16/32   | Return value           |
-| encryptedPart | byte array             | bin 8/16/32    | Encrypted part of data |
+| encryptedPart | octet-stream           | bin 8/16/32    | Encrypted part of data |
 
 **Error Codes**
 
@@ -923,7 +924,7 @@ For some multi-part encryption mechanisms, the input plaintext data has certain 
 | Name              | Type                   | Representation | Description                 |
 |-------------------|------------------------|----------------|-----------------------------|
 | status            | [CK_RV](#return-value) | uint 8/16/32   | Return value                |
-| lastEncryptedPart | byte array             | bin 8/16/32    | Last encrypted part of data |
+| lastEncryptedPart | octet-stream           | bin 8/16/32    | Last encrypted part of data |
 
 **Error Codes**
 
@@ -959,7 +960,7 @@ After calling [DecryptInit](#decrypt-init), the application can either call [Dec
 |-----------|---------------------------------------|----------------|--------------------|
 | hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism   |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
 | hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
 
 **Response**
@@ -1096,14 +1097,14 @@ For most mechanisms, [Decrypt](#decrypt) is equivalent to a sequence of [Decrypt
 | Name          | Type              | Representation | Description          |
 |---------------|-------------------|----------------|----------------------|
 | hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle       |
-| encryptedData | byte array        | bin 8/16/32    | Data to be decrypted |
+| encryptedData | octet-stream      | bin 8/16/32    | Data to be decrypted |
 
 **Response**
 
 | Name          | Type                   | Representation | Description          |
 |---------------|------------------------|----------------|----------------------|
 | status        | [CK_RV](#return-value) | uint 8/16/32   | Return value         |
-| data          | byte array             | bin 8/16/32    | Decrypted data       |
+| data          | octet-stream           | bin 8/16/32    | Decrypted data       |
 
 **Error Codes**
 
@@ -1136,14 +1137,14 @@ The decryption operation must have been initialized with [DecryptInit](#decrypt-
 | Name          | Type              | Representation | Description         |
 |---------------|-------------------|----------------|---------------------|
 | hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle      |
-| encryptedPart | byte array        | bin 8/16/32    | Encrypted data part |
+| encryptedPart | octet-stream      | bin 8/16/32    | Encrypted data part |
 
 **Response**
 
 | Name   | Type                   | Representation | Description         |
 |--------|------------------------|----------------|---------------------|
 | status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
-| part   | byte array             | bin 8/16/32    | Decrypted data part |
+| part   | octet-stream           | bin 8/16/32    | Decrypted data part |
 
 **Error Codes**
 
@@ -1184,7 +1185,7 @@ If the input ciphertext data cannot be decrypted because it has an inappropriate
 | Name     | Type                   | Representation | Description              |
 |----------|------------------------|----------------|--------------------------|
 | status   | [CK_RV](#return-value) | uint 8/16/32   | Return value             |
-| lastPart | byte array             | bin 8/16/32    | Last decrypted data part |
+| lastPart | octet-stream           | bin 8/16/32    | Last decrypted data part |
 
 **Error Codes**
 
@@ -1224,7 +1225,7 @@ To process additional data (in single or multiple parts), the application must c
 |-----------|---------------------------------------|----------------|--------------------|
 | hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Digest mechanism   |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
 
 **Response**
 
@@ -1439,7 +1440,7 @@ After calling [SignInit](#sign-init), the application can either call [Sign](#si
 |-----------|---------------------------------------|----------------|--------------------|
 | hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signing mechanism   |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
 | hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
 
 **Response**
@@ -1572,14 +1573,14 @@ For most mechanisms, [Sign](#sign) is equivalent to a sequence of [SignUpdate](#
 | Name      | Type              | Representation | Description       |
 |-----------|-------------------|----------------|-------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle    |
-| data      | byte array        | bin 8/16/32    | Data to be signed |
+| data      | octet-stream      | bin 8/16/32    | Data to be signed |
 
 **Response**
 
 | Name      | Type                   | Representation | Description    |
 |-----------|------------------------|----------------|----------------|
 | status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| signature | byte array             | bin 8/16/32    | Data signature |
+| signature | octet-stream           | bin 8/16/32    | Data signature |
 
 **Error Codes**
 
@@ -1613,7 +1614,7 @@ The signature operation must have been initialized with [SignInit](#sign-init). 
 | Name      | Type              | Representation | Description            |
 |-----------|-------------------|----------------|------------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle         |
-| part      | byte array        | bin 8/16/32    | Data part to be signed |
+| part      | octet-stream      | bin 8/16/32    | Data part to be signed |
 
 **Response**
 
@@ -1656,7 +1657,7 @@ The signing operation must have been initialized with [SignInit](#sign-init). A 
 | Name      | Type                   | Representation | Description    |
 |-----------|------------------------|----------------|----------------|
 | status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| signature | byte array             | bin 8/16/32    | Data signature |
+| signature | octet-stream           | bin 8/16/32    | Data signature |
 
 **Error Codes**
 
@@ -1691,7 +1692,7 @@ After calling [SignRecoverInit](#sign-recover-init), the application may call [S
 |-----------|---------------------------------------|----------------|--------------------|
 | hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signing mechanism   |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
 | hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
 
 **Response**
@@ -1735,14 +1736,14 @@ The signing operation must have been initialized with [SignRecoverInit](#sign-re
 | Name      | Type              | Representation | Description       |
 |-----------|-------------------|----------------|-------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle    |
-| data      | byte array        | bin 8/16/32    | Data to be signed |
+| data      | octet-stream      | bin 8/16/32    | Data to be signed |
 
 **Response**
 
 | Name      | Type                   | Representation | Description    |
 |-----------|------------------------|----------------|----------------|
 | status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| signature | byte array             | bin 8/16/32    | Data signature |
+| signature | octet-stream           | bin 8/16/32    | Data signature |
 
 **Error Codes**
 
@@ -1779,7 +1780,7 @@ After calling [VerifyInit](#verify-init), the application can either call [Verif
 |-----------|---------------------------------------|----------------|----------------------------------|
 | hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle                   |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signature Verification mechanism |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter               |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter               |
 | hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle                       |
 
 **Response**
@@ -1914,14 +1915,14 @@ For most mechanisms, [Verify](#verify) is equivalent to a sequence of [VerifyUpd
 | Name      | Type              | Representation | Description       |
 |-----------|-------------------|----------------|-------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle    |
-| data      | byte array        | bin 8/16/32    | Data to be signed |
+| data      | octet-stream      | bin 8/16/32    | Data to be signed |
 
 **Response**
 
 | Name      | Type                   | Representation | Description    |
 |-----------|------------------------|----------------|----------------|
 | status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| signature | byte array             | bin 8/16/32    | Data signature |
+| signature | octet-stream           | bin 8/16/32    | Data signature |
 
 **Error Codes**
 
@@ -1954,7 +1955,7 @@ The verification operation must have been initialized with [VerifyInit](#verify-
 | Name      | Type              | Representation | Description              |
 |-----------|-------------------|----------------|--------------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle           |
-| part      | byte array        | bin 8/16/32    | Data part to be verified |
+| part      | octet-stream      | bin 8/16/32    | Data part to be verified |
 
 **Response**
 
@@ -1992,7 +1993,7 @@ A successful call to [VerifyFinal](#verify-final) should return either the value
 | Name      | Type              | Representation | Description    |
 |-----------|-------------------|----------------|----------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
-| signature | byte array        | bin 8/16/32    | Data signature |
+| signature | octet-stream      | bin 8/16/32    | Data signature |
 
 **Response**
 
@@ -2033,7 +2034,7 @@ After calling [VerifyRecoverInit](#verify-recover-init), the application may cal
 |-----------|---------------------------------------|----------------|----------------------------------|
 | hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle                   |
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signature Verification mechanism |
-| parameter | byte array                            | bin 8/16/32    | Optional parameter               |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter               |
 | hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle                       |
 
 **Response**
@@ -2079,14 +2080,14 @@ A successful call to [VerifyRecover](#verify-recover) should return either the v
 | Name      | Type              | Representation | Description    |
 |-----------|-------------------|----------------|----------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
-| signature | byte array        | bin 8/16/32    | Data signature |
+| signature | octet-stream      | bin 8/16/32    | Data signature |
 
 **Response**
 
 | Name   | Type                   | Representation | Description    |
 |--------|------------------------|----------------|----------------|
 | status | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
-| data   | byte array            | bin 8/16/32     | Data recovered |
+| data   | octet-stream           | bin 8/16/32     | Data recovered |
 
 **Error Codes**
 
@@ -2124,14 +2125,14 @@ Digest and encryption operations must both be active (they must have been initia
 | Name      | Type              | Representation | Description               |
 |-----------|-------------------|----------------|---------------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle            |
-| part      | byte array        | bin 8/16/32    | Data part to be encrypted |
+| part      | octet-stream      | bin 8/16/32    | Data part to be encrypted |
 
 **Response**
 
 | Name          | Type                   | Representation | Description            |
 |---------------|------------------------|----------------|------------------------|
 | status        | [CK_RV](#return-value) | uint 8/16/32   | Return value           |
-| encryptedPart | byte array             | bin 8/16/32    | Encrypted part of data |
+| encryptedPart | octet-stream           | bin 8/16/32    | Encrypted part of data |
 
 **Error Codes**
 
@@ -2176,14 +2177,14 @@ Because of this, it is critical that when an application uses a padded decryptio
 | Name          | Type              | Representation | Description         |
 |---------------|-------------------|----------------|---------------------|
 | hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle      |
-| encryptedPart | byte array        | bin 8/16/32    | Encrypted data part |
+| encryptedPart | octet-stream      | bin 8/16/32    | Encrypted data part |
 
 **Response**
 
 | Name   | Type                   | Representation | Description         |
 |--------|------------------------|----------------|---------------------|
 | status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
-| part   | byte array             | bin 8/16/32    | Decrypted data part |
+| part   | octet-stream           | bin 8/16/32    | Decrypted data part |
 
 **Error Codes**
 
@@ -2217,14 +2218,14 @@ Signature and encryption operations must both be active (they must have been ini
 | Name      | Type              | Representation | Description               |
 |-----------|-------------------|----------------|---------------------------|
 | hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle            |
-| part      | byte array        | bin 8/16/32    | Data part to be encrypted |
+| part      | octet-stream      | bin 8/16/32    | Data part to be encrypted |
 
 **Response**
 
 | Name          | Type                   | Representation | Description            |
 |---------------|------------------------|----------------|------------------------|
 | status        | [CK_RV](#return-value) | uint 8/16/32   | Return value           |
-| encryptedPart | byte array             | bin 8/16/32    | Encrypted part of data |
+| encryptedPart | octet-stream           | bin 8/16/32    | Encrypted part of data |
 
 **Error Codes**
 
@@ -2270,14 +2271,14 @@ Because of this, it is critical that when an application uses a padded decryptio
 | Name          | Type              | Representation | Description         |
 |---------------|-------------------|----------------|---------------------|
 | hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle      |
-| encryptedPart | byte array        | bin 8/16/32    | Encrypted data part |
+| encryptedPart | octet-stream      | bin 8/16/32    | Encrypted data part |
 
 **Response**
 
 | Name   | Type                   | Representation | Description         |
 |--------|------------------------|----------------|---------------------|
 | status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
-| part   | byte array             | bin 8/16/32    | Decrypted data part |
+| part   | octet-stream           | bin 8/16/32    | Decrypted data part |
 
 **Error Codes**
 
@@ -2302,6 +2303,59 @@ Because of this, it is critical that when an application uses a padded decryptio
 ### Key Management Functions
 
 #### Generate Key
+
+Generates a secret key or set of domain parameters, creating a new object.
+
+If the generation mechanism is for domain parameter generation, the `CKA_CLASS` attribute will have the value `CKO_DOMAIN_PARAMETERS`; otherwise, it will have the value `CKO_SECRET_KEY`.
+
+Since the type of key or domain parameters to be generated is implicit in the generation mechanism, the template does not need to supply a key type. If it does supply a key type which is inconsistent with the generation mechanism, [GenerateKey](#generate-key) fails and returns the error code `CKR_TEMPLATE_INCONSISTENT`. The `CKA_CLASS` attribute is treated similarly.
+
+If a call to [GenerateKey](#generate-key) cannot support the precise template supplied to it, it will fail and return without creating an object.
+
+The object created by a successful call to [GenerateKey](#generate-key) will have its `CKA_LOCAL` attribute set to `CK_TRUE`.
+
+**Request**
+
+| Name      | Type                                  | Representation | Description        |
+|-----------|---------------------------------------|----------------|--------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism   |
+| parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
+| templates | array of [CK_ATTRIBUTE](#attributes)  | array 8/16     | List of templates  |
+| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
+
+**Response**
+
+| Name   | Type                   | Representation | Description         |
+|--------|------------------------|----------------|---------------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_READ_ONLY`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_ATTRIBUTE_VALUE_INVALID`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TEMPLATE_INCOMPLETE`
+- `CKR_TEMPLATE_INCONSISTENT`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_USER_NOT_LOGGED_IN`
 
 #### Generate Key Pair
 
@@ -2951,8 +3005,25 @@ Possible values of `CK_STATE`
 
 Possible value of `CK_USER_TYPE`
 
-| Code                     | Value |
-|--------------------------|-------|
-| CKU_SO                   | 0     |
-| CKU_USER                 | 1     |
-| CKU_CONTEXT_SPECIFIC     | 2     |
+| Code                 | Value |
+|----------------------|-------|
+| CKU_SO               | 0     |
+| CKU_USER             | 1     |
+| CKU_CONTEXT_SPECIFIC | 2     |
+
+### Object Classes
+
+Possible values of `CK_OBJECT_CLASS`
+
+| Code                    | Value      |
+|-------------------------|------------|
+| `CKO_DATA`              | 0x00000000 |
+| `CKO_CERTIFICATE`       | 0x00000001 |
+| `CKO_PUBLIC_KEY`        | 0x00000002 |
+| `CKO_PRIVATE_KEY`       | 0x00000003 |
+| `CKO_SECRET_KEY`        | 0x00000004 |
+| `CKO_HW_FEATURE`        | 0x00000005 |
+| `CKO_DOMAIN_PARAMETERS` | 0x00000006 |
+| `CKO_MECHANISM`         | 0x00000007 |
+| `CKO_OTP_KEY`           | 0x00000008 |
+| `CKO_VENDOR_DEFINED`    | 0x80000000 |
