@@ -1646,8 +1646,52 @@ The signing operation must have been initialized with [SignInit](#sign-init). A 
 - `CKR_USER_NOT_LOGGED_IN`
 - `CKR_FUNCTION_REJECTED`
 
-
 #### Sign Recover Init
+
+Initializes a signature operation, where the data can be recovered from the signature.
+
+The `CKA_SIGN_RECOVER` attribute of the signature key, which indicates whether the key supports signatures where the data can be recovered from the signature, must be `CK_TRUE`.
+After calling [SignRecoverInit](#sign-recover-init), the application may call [SignRecover](#sign-recover) to sign in a single part. The signature operation is active until the application uses a call to [SignRecover](#sign-recover) to actually obtain the signature. To process additional data in a single part, the application must call [SignRecoverInit](#sign-recover-init) again.
+
+**Request**
+
+| Name      | Type                                  | Representation | Description        |
+|-----------|---------------------------------------|----------------|--------------------|
+| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Signing mechanism   |
+| parameter | byte array                            | bin 8/16/32    | Optional parameter |
+| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
+
+**Response**
+
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_FUNCTION_NOT_PERMITTED`
+- `CKR_KEY_HANDLE_INVALID`
+- `CKR_KEY_SIZE_RANGE`
+- `CKR_KEY_TYPE_INCONSISTENT`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
+
 
 #### Sign Recover
 
