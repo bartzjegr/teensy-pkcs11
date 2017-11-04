@@ -403,8 +403,6 @@ When a session is closed, all session objects created by the session are destroy
 
 If this function is successful and it closes the last session between the application and the token, the login state of the token for the application returns to public sessions. Any new sessions to the token opened by the application will be either R/O Public or R/W Public sessions.
 
-Depending on the token, when the last open session any application has with the token is closed, the token may be "ejected" from its reader (if this capability exists).
-
 Despite the fact this [CloseSession](#close-session) is supposed to close a session, the return value `CKR_SESSION_CLOSED` is an error return. It actually indicates the (probably somewhat unlikely) event that while this function call was executing, another call was made to [CloseSession](#close-session) to close this particular session, and that call finished executing first. Such uses of sessions are a bad idea, and Cryptoki makes little promise of what will occur in general if an application indulges in this sort of behavior.
 
 **Request**
@@ -433,6 +431,35 @@ Despite the fact this [CloseSession](#close-session) is supposed to close a sess
 - `CKR_SESSION_HANDLE_INVALID`
 
 #### Close All Sessions
+
+closes all sessions an application has with a token.
+
+When a session is closed, all session objects created by the session are destroyed automatically.
+
+After successful execution of this function, the login state of the token for the application returns to public sessions. Any new sessions to the token opened by the application will be either R/O Public or R/W Public sessions.
+
+**Request**
+
+None
+
+**Response**
+
+| Name         | Type                   | Representation | Description    |
+|--------------|------------------------|----------------|----------------|
+| status       | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_SLOT_ID_INVALID`
+- `CKR_TOKEN_NOT_PRESENT`
 
 #### Get Session Info
 
