@@ -1945,6 +1945,41 @@ For most mechanisms, [Verify](#verify) is equivalent to a sequence of [VerifyUpd
 
 #### Verify Update
 
+Continues a multiple-part verification operation, processing another data part.
+
+The verification operation must have been initialized with [VerifyInit](#verify-init). This function may be called any number of times in succession. A call to [VerifyUpdate](#verify-update) which results in an error terminates the current verification operation.
+
+**Request**
+
+| Name      | Type              | Representation | Description         |
+|-----------|-------------------|----------------|---------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle      |
+| data      | byte array        | bin 8/16/32    | Data to be verified |
+
+**Response**
+
+| Name      | Type                   | Representation | Description    |
+|-----------|------------------------|----------------|----------------|
+| status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| signature | byte array             | bin 8/16/32    | Data signature |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 #### Verify Final
 
 #### Verify Recover Init
