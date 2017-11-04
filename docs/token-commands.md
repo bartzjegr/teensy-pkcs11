@@ -1867,6 +1867,50 @@ After calling [VerifyInit](#verify-init), the application can either call [Verif
 
 #### Verify
 
+Verifies a signature in a single-part operation, where the signature is an appendix to the data.
+
+The verification operation must have been initialized with [VerifyInit](#verify-init). A call to [Verify](#verify) always terminates the active verification operation.
+
+A successful call to [Verify](#verify) should return either the value `CKR_OK` (indicating that the supplied signature is valid) or `CKR_SIGNATURE_INVALID` (indicating that the supplied signature is invalid). If the signature can be seen to be invalid purely on the basis of its length, then `CKR_SIGNATURE_LEN_RANGE` should be returned. In any of these cases, the active signing operation is terminated.
+
+[Verify](#verify) can not be used to terminate a multi-part operation, and must be called after [VerifyInit](#verify-init) without intervening [VerifyUpdate](#verify-update) calls.
+
+For most mechanisms, [Verify](#verify) is equivalent to a sequence of [VerifyUpdate](#verify-update) operations followed by [VerifyFinal](#verify_final).
+
+**Request**
+
+| Name      | Type              | Representation | Description       |
+|-----------|-------------------|----------------|-------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle    |
+| data      | byte array        | bin 8/16/32    | Data to be signed |
+
+**Response**
+
+| Name      | Type                   | Representation | Description    |
+|-----------|------------------------|----------------|----------------|
+| status    | [CK_RV](#return-value) | uint 8/16/32   | Return value   |
+| signature | byte array             | bin 8/16/32    | Data signature |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_INVALID`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SIGNATURE_INVALID`
+- `CKR_SIGNATURE_LEN_RANGE`
+
 #### Verify Update
 
 #### Verify Final
