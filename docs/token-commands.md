@@ -496,7 +496,7 @@ Obtains information about a session.
 
 #### Get Operation State
 
-Obtains a copy of the cryptographic operations state of a session, encoded as a string of bytes. State serialization is mechanism specific. Refer to [Token State Serialization]("token-state-serialization.md") for more detail.
+Obtains a copy of the cryptographic operations state of a session, encoded as a string of bytes. State serialization is mechanism specific. Refer to [Token State Serialization](token-state-serialization.md) for more detail.
 
 **Request**
 
