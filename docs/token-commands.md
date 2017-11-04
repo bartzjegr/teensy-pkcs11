@@ -2247,6 +2247,58 @@ Signature and encryption operations must both be active (they must have been ini
 
 #### Decrypt Verify Update
 
+Continues a multiple-part combined decryption and verification operation, processing another data part.
+
+If a [DecryptVerifyUpdate](#decrypt-verify-update) call does not produce decrypted output (because an error occurs, or because pPart has the value NULL_PTR, or because pulPartLen is too small to hold the entire encrypted part output), then no plaintext is passed to the active verification operation.
+
+Decryption and signature operations must both be active (they must have been initialized with [DecryptInit](#decrypt-init) and [VerifyInit](#verify-init), respectively). This function may be called any number of times in succession, and may be interspersed with [DecryptUpdate](#decrypt-update) and [VerifyUpdate](#verify-update) calls.
+
+Use of [DecryptVerifyUpdate](#decrypt-verify-update) involves a pipelining issue that does not arise when using [SignEncryptUpdate](#sign-encrypt-update), the "inverse function" of [DecryptVerifyUpdate](#decrypt-verify-update). This is because when [SignEncryptUpdate](#sign-encrypt-update) is called, precisely the same input is passed to both the active signing operation and the active encryption operation; however, when [DecryptVerifyUpdate](#decrypt-verify-update) is called, the input passed to the active verifying operation is the output of the active decryption operation. This issue comes up only when the mechanism used for decryption performs padding.
+
+In particular, envision a 24-byte ciphertext which was obtained by encrypting an 18-byte plaintext with DES in CBC mode with PKCS padding. Consider an application which will simultaneously decrypt this ciphertext and verify a signature on the original plaintext thereby obtained.
+
+After initializing decryption and verification operations, the application passes the 24-byte ciphertext (3 DES blocks) into [DecryptVerifyUpdate](#decrypt-verify-update). [DecryptVerifyUpdate](#decrypt-verify-update) returns exactly 16 bytes of plaintext, since at this point, Cryptoki doesn't know if there's more ciphertext coming, or if the last block of ciphertext held any padding. These 16 bytes of plaintext are passed into the active verification operation.
+
+Since there is no more ciphertext, the application calls [DecryptFinal](#decrypt-final). This tells Cryptoki that there's no more ciphertext coming, and the call returns the last 2 bytes of plaintext. However, since the active decryption and verification operations are linked only through the [DecryptVerifyUpdate](#decrypt-verify-update) call, these 2 bytes of plaintext are not passed on to the verification mechanism.
+
+A call to [VerifyFinal](#verify-final), therefore, would verify whether or not the signature supplied is a valid signature on the first 16 bytes of the plaintext, not on the entire plaintext. It is crucial that, before [VerifyFinal](#verify-final) is called, the last 2 bytes of plaintext get passed into the active verification operation via a [VerifyUpdate](#verify-update) call.
+
+Because of this, it is critical that when an application uses a padded decryption mechanism with [DecryptVerifyUpdate](#decrypt-verify-update), it knows exactly how much plaintext has been passed into the active verification operation. Extreme caution is warranted when using a padded decryption mechanism with [DecryptVerifyUpdate](#decrypt-verify-update).
+
+**Request**
+
+| Name          | Type              | Representation | Description         |
+|---------------|-------------------|----------------|---------------------|
+| hSession      | CK_SESSION_HANDLE | uint 8/16/32   | Session handle      |
+| encryptedPart | byte array        | bin 8/16/32    | Encrypted data part |
+
+**Response**
+
+| Name   | Type                   | Representation | Description         |
+|--------|------------------------|----------------|---------------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
+| part   | byte array             | bin 8/16/32    | Decrypted data part |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DATA_LEN_RANGE`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_ENCRYPTED_DATA_INVALID`
+- `CKR_ENCRYPTED_DATA_LEN_RANGE`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 ### Key Management Functions
 
 #### Generate Key
