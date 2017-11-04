@@ -164,6 +164,36 @@ None
 
 #### Get Mechanism List
 
+ Used to obtain a list of mechanism types supported by a token.
+
+ **Request**
+
+ None
+
+ **Response**
+
+ | Name            | Type                                           | Representation | Description                            |
+ |-----------------|------------------------------------------------|----------------|----------------------------------------|
+ | status          | [CK_RV](#return-value)                         | uint 8/16/32   | Return value                           |
+ | slotDescription | array of [CK_MECHANISM_TYPE](#mechanism-codes) | array 8/16     | slot description (64 chars)            |
+
+ **Error Codes**
+
+ - `CKR_BUFFER_TOO_SMALL`
+ - `CKR_CRYPTOKI_NOT_INITIALIZED`
+ - `CKR_DEVICE_ERROR`
+ - `CKR_DEVICE_MEMORY`
+ - `CKR_DEVICE_REMOVED`
+ - `CKR_FUNCTION_FAILED`
+ - `CKR_GENERAL_ERROR`
+ - `CKR_HOST_MEMORY`
+ - `CKR_OK`
+ - `CKR_SLOT_ID_INVALID`
+ - `CKR_TOKEN_NOT_PRESENT`
+ - `CKR_TOKEN_NOT_RECOGNIZED`
+ - `CKR_ARGUMENTS_BAD`
+
+
 #### Get Mechanism Info
 
 #### Init Token
@@ -1179,7 +1209,7 @@ Possible values of `CK_RV`
 
 ### Mechanism Codes
 
-Possible Values of CK_MECHANISM_TYPE
+Possible Values of `CK_MECHANISM_TYPE`
 
 | Code                                  | Value      |
 |---------------------------------------|------------|
