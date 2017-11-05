@@ -2417,6 +2417,67 @@ The key objects created by a successful call to [GenerateKeyPair](#generate-key-
 
 #### Wrap Key
 
+Wraps (i.e., encrypts) a private or secret key.
+
+The CKA_WRAP attribute of the wrapping key, which indicates whether the key supports wrapping, must be `CK_TRUE`. The `CKA_EXTRACTABLE` attribute of the key to be wrapped must also be `CK_TRUE`.
+
+If the key to be wrapped cannot be wrapped for some token-specific reason, despite its having its `CKA_EXTRACTABLE` attribute set to `CK_TRUE`, then [WrapKey](#wrap-key) fails with error code `CKR_KEY_NOT_WRAPPABLE`. If it cannot be wrapped with the specified wrapping key and mechanism solely because of its length, then [WrapKey](#wrap-key) fails with error code `CKR_KEY_SIZE_RANGE`.
+
+[WrapKey](#wrap-key) can be used in the following situations:
+
+To wrap any secret key with a public key that supports encryption and decryption.
+
+To wrap any secret key with any other secret key. Consideration must be given to key size and mechanism strength or the token may not allow the operation.
+
+To wrap a private key with any secret key. Of course, tokens vary in which types of keys can actually be wrapped with which mechanisms.
+
+To partition the wrapping keys so they can only wrap a subset of extractable keys the attribute `CKA_WRAP_TEMPLATE` can be used on the wrapping key to specify an attribute set that will be compared against the attributes of the key to be wrapped. If all attributes match according to the [FindObjects](#find-objects) rules of attribute matching then the wrap will proceed. The value of this attribute is an attribute template and the size is the number of items in the template times the size of CK_ATTRIBUTE. If this attribute is not supplied then any template is acceptable. Attributes not present are not checked. If any attribute mismatch occurs on an attempt to wrap a key then the function shall return `CKR_KEY_HANDLE_INVALID`.
+
+**Request**
+
+| Name         | Type                                  | Representation | Description         |
+|--------------|---------------------------------------|----------------|---------------------|
+| hSession     | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle      |
+| mechanism    | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism    |
+| parameter    | octet-stream                          | bin 8/16/32    | Optional parameter  |
+| hWrappingKey | CK_OBJECT_HANDLE                      | uint 8/16/32   | Wrapping key handle |
+| hKey         | CK_OBJECT_HANDLE                      | uint 8/16/32   | Wrapped key handle  |
+
+**Response**
+
+| Name        | Type                   | Representation | Description                |
+|-------------|------------------------|----------------|----------------------------|
+| status      | [CK_RV](#return-value) | uint 8/16/32   | Return value               |
+| pWrappedKey | octet-stream           | bin 8/16/32    | Serialized and wrapped key |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_HANDLE_INVALID`
+- `CKR_KEY_NOT_WRAPPABLE`
+- `CKR_KEY_SIZE_RANGE`
+- `CKR_KEY_UNEXTRACTABLE`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_USER_NOT_LOGGED_IN`
+- `CKR_WRAPPING_KEY_HANDLE_INVALID`
+- `CKR_WRAPPING_KEY_SIZE_RANGE`
+- `CKR_WRAPPING_KEY_TYPE_INCONSISTENT`
+
 #### Unwrap Key
 
 #### Derive Key
