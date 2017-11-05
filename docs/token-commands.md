@@ -991,6 +991,34 @@ The search must have been initialized with [FindObjectsInit](#find-objects-init)
 
 #### Find Objects Final
 
+Terminates a search for token and session objects.
+
+**Request**
+
+| Name      | Type              | Representation | Description    |
+|-----------|-------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
+
+**Response**
+
+| Name     | Type                   | Representation | Description  |
+|----------|------------------------|----------------|--------------|
+| status   | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 ### Encryption Functions
 
 #### Encrypt Init
