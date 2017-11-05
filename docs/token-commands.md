@@ -669,6 +669,53 @@ If there are any active cryptographic or object-finding operations in an applica
 
 #### Create Object
 
+Creates a new object.
+
+If a call to [CreateObject](#create-object) cannot support the precise template supplied to it, it will fail and return without creating any object.
+
+If [CreateObject](#create-object) is used to create a key object, the key object will have its CKA_LOCAL attribute set to `CK_FALSE`. If that key object is a secret or private key then the new key will have the `CKA_ALWAYS_SENSITIVE` attribute set to `CK_FALSE`, and the `CKA_NEVER_EXTRACTABLE` attribute set to `CK_FALSE`.
+
+Only session objects can be created during a read-only session. Only public objects can be created unless the normal user is logged in.
+
+**Request**
+
+| Name      | Type                                                                             | Representation | Description                       |
+|-----------|----------------------------------------------------------------------------------|----------------|-----------------------------------|
+| hSession  | CK_SESSION_HANDLE                                                                | uint 8/16/32   | Session handle                    |
+| template  | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and octet-stream of attribute value | map 16/32      | Map of attribute and their values |
+
+**Response**
+
+| Name    | Type                   | Representation | Description        |
+|---------|------------------------|----------------|--------------------|
+| status  | [CK_RV](#return-value) | uint 8/16/32   | Return value       |
+| hObject | CK_OBJECT_HANDLE       | uint 8/16/32   | Created object |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_READ_ONLY`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_ATTRIBUTE_VALUE_INVALID`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_DOMAIN_PARAMS_INVALID`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TEMPLATE_INCOMPLETE`
+- `CKR_TEMPLATE_INCONSISTENT`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_USER_NOT_LOGGED_IN`
+
+
 #### Copy Object
 
 #### Destroy Object
