@@ -78,7 +78,7 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
 - [Types](#types)
     - [Return Value](#return-value)
     - [Mechanism Codes](#mechanism-codes)
-    - [Attributes](#attributes)
+    - [Attribute Types](#attribute-types)
     - [Flags](#flags)
     - [States](#states)
     - [User Types](#user-types)
@@ -178,7 +178,7 @@ None
  | Name       | Type                                           | Representation | Description        |
  |------------|------------------------------------------------|----------------|--------------------|
  | status     | [CK_RV](#return-value)                         | uint 8/16/32   | Return value       |
- | mechanisms | array of [CK_MECHANISM_TYPE](#mechanism-codes) | array 8/16     | List of mechanisms |
+ | mechanisms | array of [CK_MECHANISM_TYPE](#mechanism-codes) | array 16/32    | List of mechanisms |
 
  **Error Codes**
 
@@ -2316,12 +2316,12 @@ The object created by a successful call to [GenerateKey](#generate-key) will hav
 
 **Request**
 
-| Name      | Type                                  | Representation | Description        |
-|-----------|---------------------------------------|----------------|--------------------|
-| hSession  | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle     |
-| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism   |
-| parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
-| templates | array of [CK_ATTRIBUTE](#attributes)  | array 8/16     | List of templates  |
+| Name      | Type                                                                             | Representation | Description                       |
+|-----------|----------------------------------------------------------------------------------|----------------|-----------------------------------|
+| hSession  | CK_SESSION_HANDLE                                                                | uint 8/16/32   | Session handle                    |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes)                                            | uint 8/16/32   | Cipher mechanism                  |
+| parameter | octet-stream                                                                     | bin 8/16/32    | Optional parameter                |
+| templates | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and octet-stream of attribute value | map 16/32      | Map of attribute and their values |
 
 **Response**
 
@@ -2371,13 +2371,13 @@ The key objects created by a successful call to [GenerateKeyPair](#generate-key-
 
 **Request**
 
-| Name                | Type                                  | Representation | Description                      |
-|---------------------|---------------------------------------|----------------|----------------------------------|
-| hSession            | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle                   |
-| mechanism           | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism                 |
-| parameter           | octet-stream                          | bin 8/16/32    | Optional parameter               |
-| publicKeyTemplates  | array of [CK_ATTRIBUTE](#attributes)  | array 8/16     | List of templates of public key  |
-| privateKeyTemplates | array of [CK_ATTRIBUTE](#attributes)  | array 8/16     | List of templates of private key |
+| Name                | Type                                                                             | Representation | Description                                      |
+|---------------------|----------------------------------------------------------------------------------|----------------|--------------------------------------------------|
+| hSession            | CK_SESSION_HANDLE                                                                | uint 8/16/32   | Session handle                                   |
+| mechanism           | [CK_MECHANISM_TYPE](#mechanism-codes)                                            | uint 8/16/32   | Cipher mechanism                                 |
+| parameter           | octet-stream                                                                     | bin 8/16/32    | Optional parameter                               |
+| publicKeyTemplates  | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and octet-stream of attribute value | map 16/32      | Map of attribute and their values of public key  |
+| privateKeyTemplates | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and octet-stream of attribute value | map 16/32      | Map of attribute and their values of private key |
 
 **Response**
 
@@ -2907,7 +2907,7 @@ Possible Values of `CK_MECHANISM_TYPE`
 | `CKM_RSA_PKCS_OAEP_TPM_1_1`           | 0x00004002 |
 | `CKM_VENDOR_DEFINED`                  | 0x80000000 |
 
-### Attributes
+### Attribute Types
 
 Possible values of `CK_ATTRIBUTE_TYPE`
 
