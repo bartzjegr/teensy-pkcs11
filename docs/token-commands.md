@@ -2510,7 +2510,7 @@ To partition the unwrapping keys so they can only unwrap a subset of keys the at
 |-------------|----------------------------------------------------------------------------------|----------------|-----------------------------------|
 | status      | [CK_RV](#return-value)                                                           | uint 8/16/32   | Return value                      |
 | template    | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and octet-stream of attribute value | map 16/32      | Map of attribute and their values |
-| hKey        | CK_OBJECT_HANDLE                                                                 | uint 8/16/32   | Wrapped key handle                |
+| hKey        | CK_OBJECT_HANDLE                                                                 | uint 8/16/32   | Unwrapped key handle              |
 
 **Error Codes**
 
