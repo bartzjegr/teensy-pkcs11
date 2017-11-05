@@ -2496,13 +2496,13 @@ To partition the unwrapping keys so they can only unwrap a subset of keys the at
 
 **Request**
 
-| Name           | Type                                  | Representation | Description              |
-|----------------|---------------------------------------|----------------|--------------------------|
-| hSession       | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle           |
-| mechanism      | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Key unwrapping mechanism |
-| parameter      | octet-stream                          | bin 8/16/32    | Optional parameter       |
+| Name           | Type                                  | Representation | Description                |
+|----------------|---------------------------------------|----------------|----------------------------|
+| hSession       | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle             |
+| mechanism      | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Key unwrapping mechanism   |
+| parameter      | octet-stream                          | bin 8/16/32    | Optional parameter         |
 | hUnwrappingKey | CK_OBJECT_HANDLE                      | uint 8/16/32   | Unwrapping key handle      |
-| wrappedKey     | octet-stream           | bin 8/16/32    | Serialized and wrapped key |
+| wrappedKey     | octet-stream                          | bin 8/16/32    | Serialized and wrapped key |
 
 **Response**
 
