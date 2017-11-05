@@ -956,6 +956,39 @@ Even though [FindObjectsInit](#find-objects-init) can return the values `CKR_ATT
 
 #### Find Objects
 
+Continues a search for token and session objects that match a template, obtaining additional object handles.
+
+If there are no more objects matching the template, then the location that pulObjectCount points to receives the value 0.
+The search must have been initialized with [FindObjectsInit](#find-objects-init).
+
+**Request**
+
+| Name      | Type              | Representation | Description    |
+|-----------|-------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
+
+**Response**
+
+| Name     | Type                      | Representation | Description             |
+|----------|---------------------------|----------------|-------------------------|
+| status   | [CK_RV](#return-value)    | uint 8/16/32   | Return value            |
+| objects  | array of CK_OBJECT_HANDLE | array 16/32    | Array of object handles |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_NOT_INITIALIZED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 #### Find Objects Final
 
 ### Encryption Functions
