@@ -2548,6 +2548,61 @@ To partition the unwrapping keys so they can only unwrap a subset of keys the at
 
 #### Derive Key
 
+Derives a key from a base key, creating a new key object.
+
+The values of the `CK_SENSITIVE`, `CK_ALWAYS_SENSITIVE`, `CK_EXTRACTABLE`, and `CK_NEVER_EXTRACTABLE` attributes for the base key affect the values that these attributes can hold for the newly-derived key. If a call to [DeriveKey](#derive-key) cannot support the precise template supplied to it, it will fail and return without creating any key object.
+
+The key object created by a successful call to [DeriveKey](#derive-key) will have its `CKA_LOCAL` attribute set to `CK_FALSE`.
+
+**Request**
+
+| Name      | Type                                                                             | Representation | Description                       |
+|-----------|----------------------------------------------------------------------------------|----------------|-----------------------------------|
+| hSession  | CK_SESSION_HANDLE                                                                | uint 8/16/32   | Session handle                    |
+| mechanism | [CK_MECHANISM_TYPE](#mechanism-codes)                                            | uint 8/16/32   | Key unwrapping mechanism          |
+| parameter | octet-stream                                                                     | bin 8/16/32    | Optional parameter                |
+| hBaseKey  | CK_OBJECT_HANDLE                                                                 | uint 8/16/32   | Base key handle                   |
+| template  | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and octet-stream of attribute value | map 16/32      | Map of attribute and their values |
+
+**Response**
+
+| Name        | Type                                                                             | Representation | Description        |
+|-------------|----------------------------------------------------------------------------------|----------------|--------------------|
+| status      | [CK_RV](#return-value)                                                           | uint 8/16/32   | Return value       |
+| hKey        | CK_OBJECT_HANDLE                                                                 | uint 8/16/32   | Derived key handle |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_READ_ONLY`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_ATTRIBUTE_VALUE_INVALID`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_DOMAIN_PARAMS_INVALID`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_KEY_HANDLE_INVALID`
+- `CKR_KEY_SIZE_RANGE`
+- `CKR_KEY_TYPE_INCONSISTENT`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TEMPLATE_INCOMPLETE`
+- `CKR_TEMPLATE_INCONSISTENT`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_USER_NOT_LOGGED_IN`
+
+
 ### Random Number Generation Functions
 
 #### Seed Random
