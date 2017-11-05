@@ -870,6 +870,45 @@ Obtains the value of one or more attributes of an object.
 
 #### Set Attribute Value
 
+Modifies the value of one or more attributes of an object.
+
+**Request**
+
+| Name      | Type              | Representation | Description    |
+|-----------|-------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
+| hObject   | CK_OBJECT_HANDLE  | uint 8/16/32   | Object handle  |
+| template | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and its value | map 16/32      | Map of attribute and their values |
+
+**Response**
+
+| Name     | Type                   | Representation | Description  |
+|----------|------------------------|----------------|--------------|
+| status   | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Errror Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_READ_ONLY`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_ATTRIBUTE_VALUE_INVALID`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OBJECT_HANDLE_INVALID`
+- `CKR_OK`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TEMPLATE_INCONSISTENT`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_USER_NOT_LOGGED_IN`
+
+
 #### Find Objects Init
 
 #### Find Objects
