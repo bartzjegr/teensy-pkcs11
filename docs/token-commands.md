@@ -766,6 +766,39 @@ Only session objects can be created during a read-only session. Only public obje
 
 #### Destroy Object
 
+Destroys an object.
+
+Only session objects can be destroyed during a read-only session. Only public objects can be destroyed unless the normal user is logged in.
+
+**Request**
+
+| Name      | Type              | Representation | Description                      |
+|-----------|-------------------|----------------|----------------------------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle                   |
+| hObject   | CK_OBJECT_HANDLE  | uint 8/16/32   | Handle of object to be destroyed |
+
+**Response**
+
+| Name   | Type                   | Representation | Description  |
+|--------|------------------------|----------------|--------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OBJECT_HANDLE_INVALID`
+- `CKR_OK, CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TOKEN_WRITE_PROTECTED`
+
 #### Get Object Size
 
 #### Get Attribute Value
