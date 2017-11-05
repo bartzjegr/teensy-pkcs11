@@ -835,6 +835,39 @@ Gets the size of an object in bytes.
 
 #### Get Attribute Value
 
+Obtains the value of one or more attributes of an object.
+
+**Request**
+
+| Name      | Type              | Representation | Description    |
+|-----------|-------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
+| hObject   | CK_OBJECT_HANDLE  | uint 8/16/32   | Object handle  |
+
+**Response**
+
+| Name     | Type                                                       | Representation | Description                       |
+|----------|------------------------------------------------------------|----------------|-----------------------------------|
+| status   | [CK_RV](#return-value)                                     | uint 8/16/32   | Return value                      |
+| template | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and its value | map 16/32      | Map of attribute and their values |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_SENSITIVE`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OBJECT_HANDLE_INVALID`
+- `CKR_OK, CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+
 #### Set Attribute Value
 
 #### Find Objects Init
