@@ -2384,8 +2384,8 @@ The key objects created by a successful call to [GenerateKeyPair](#generate-key-
 | Name        | Type                   | Representation | Description               |
 |-------------|------------------------|----------------|---------------------------|
 | status      | [CK_RV](#return-value) | uint 8/16/32   | Return value              |
-| hPublicKey  | CK_OBJECT_HANDLE        uint 8/16/32    | Created Public Key Handle |
-| hPrivateKey | CK_OBJECT_HANDLE        uint 8/16/32    | Created Priate Key Handle |
+| hPublicKey  | CK_OBJECT_HANDLE       | uint 8/16/32   | Created Public Key Handle |
+| hPrivateKey | CK_OBJECT_HANDLE       | uint 8/16/32   | Created Priate Key Handle |
 
 **Error Codes**
 
