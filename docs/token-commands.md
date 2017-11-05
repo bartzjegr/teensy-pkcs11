@@ -870,15 +870,17 @@ Obtains the value of one or more attributes of an object.
 
 #### Set Attribute Value
 
-Modifies the value of one or more attributes of an object.
+Modifies the value of one or more attributes of an object. Only session objects can be modified during a read-only session.
+
+The template may specify new values for any attributes of the object that can be modified. If the template specifies a value of an attribute which is incompatible with other existing attributes of the object, the call fails with the return code `CKR_TEMPLATE_INCONSISTENT`.
 
 **Request**
 
-| Name      | Type              | Representation | Description    |
-|-----------|-------------------|----------------|----------------|
-| hSession  | CK_SESSION_HANDLE | uint 8/16/32   | Session handle |
-| hObject   | CK_OBJECT_HANDLE  | uint 8/16/32   | Object handle  |
-| template | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and its value | map 16/32      | Map of attribute and their values |
+| Name      | Type                                                       | Representation | Description                       |
+|-----------|------------------------------------------------------------|----------------|-----------------------------------|
+| hSession  | CK_SESSION_HANDLE                                          | uint 8/16/32   | Session handle                    |
+| hObject   | CK_OBJECT_HANDLE                                           | uint 8/16/32   | Object handle                     |
+| template  | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and its value | map 16/32      | Map of attribute and their values |
 
 **Response**
 
@@ -910,6 +912,47 @@ Modifies the value of one or more attributes of an object.
 
 
 #### Find Objects Init
+
+Initializes a search for token and session objects that match a template.
+
+After calling [FindObjectsInit](#find-objects-init), the application may call [FindObjects](#find-objects) one or more times to obtain handles for objects matching the template, and then eventually call [FindObjectsFinal](#find-objects-final) to finish the active search operation. At most one search operation may be active at a given time in a given session.
+
+The object search operation will only find objects that the session can view. For example, an object search in an "R/W Public Session" will not find any private objects (even if one of the attributes in the search template specifies that the search is for private objects).
+
+If a search operation is active, and objects are created or destroyed which fit the search template for the active search operation, then those objects may or may not be found by the search operation. Note that this means that, under these circumstances, the search operation may return invalid object handles.
+
+Even though [FindObjectsInit](#find-objects-init) can return the values `CKR_ATTRIBUTE_TYPE_INVALID` and `CKR_ATTRIBUTE_VALUE_INVALID`, it is not required to. For example, if it is given a search template with nonexistent attributes in it, it can return `CKR_ATTRIBUTE_TYPE_INVALID`, or it can initialize a search operation which will match no objects and return `CKR_OK`.
+
+**Request**
+
+| Name      | Type                                                       | Representation | Description    |
+|-----------|------------------------------------------------------------|----------------|----------------|
+| hSession  | CK_SESSION_HANDLE                                          | uint 8/16/32   | Session handle |
+| template  | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and its value | map 16/32      | Map of attribute and their values |
+
+**Response**
+
+| Name     | Type                   | Representation | Description  |
+|----------|------------------------|----------------|--------------|
+| status   | [CK_RV](#return-value) | uint 8/16/32   | Return value |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_ATTRIBUTE_VALUE_INVALID`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
 
 #### Find Objects
 
