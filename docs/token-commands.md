@@ -2435,20 +2435,20 @@ To partition the wrapping keys so they can only wrap a subset of extractable key
 
 **Request**
 
-| Name         | Type                                  | Representation | Description         |
-|--------------|---------------------------------------|----------------|---------------------|
-| hSession     | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle      |
-| mechanism    | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism    |
-| parameter    | octet-stream                          | bin 8/16/32    | Optional parameter  |
-| hWrappingKey | CK_OBJECT_HANDLE                      | uint 8/16/32   | Wrapping key handle |
-| hKey         | CK_OBJECT_HANDLE                      | uint 8/16/32   | Wrapped key handle  |
+| Name         | Type                                  | Representation | Description            |
+|--------------|---------------------------------------|----------------|------------------------|
+| hSession     | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle         |
+| mechanism    | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Key wrapping mechanism |
+| parameter    | octet-stream                          | bin 8/16/32    | Optional parameter     |
+| hWrappingKey | CK_OBJECT_HANDLE                      | uint 8/16/32   | Wrapping key handle    |
+| hKey         | CK_OBJECT_HANDLE                      | uint 8/16/32   | Wrapped key handle     |
 
 **Response**
 
-| Name        | Type                   | Representation | Description                |
-|-------------|------------------------|----------------|----------------------------|
-| status      | [CK_RV](#return-value) | uint 8/16/32   | Return value               |
-| pWrappedKey | octet-stream           | bin 8/16/32    | Serialized and wrapped key |
+| Name       | Type                   | Representation | Description                |
+|------------|------------------------|----------------|----------------------------|
+| status     | [CK_RV](#return-value) | uint 8/16/32   | Return value               |
+| wrappedKey | octet-stream           | bin 8/16/32    | Serialized and wrapped key |
 
 **Error Codes**
 
@@ -2479,6 +2479,72 @@ To partition the wrapping keys so they can only wrap a subset of extractable key
 - `CKR_WRAPPING_KEY_TYPE_INCONSISTENT`
 
 #### Unwrap Key
+
+Unwraps (i.e. decrypts) a wrapped key, creating a new private key or secret key object.
+
+The `CKA_UNWRAP` attribute of the unwrapping key, which indicates whether the key supports unwrapping, must be `CK_TRUE`.
+
+The new key will have the `CKA_ALWAYS_SENSITIVE` attribute set to `CK_FALSE`, and the `CKA_NEVER_EXTRACTABLE` attribute set to `CK_FALSE`. The `CKA_EXTRACTABLE` attribute is by default set to `CK_TRUE`.
+
+Some mechanisms may modify, or attempt to modify. the contents of the pMechanism structure at the same time that the key is unwrapped.
+
+If a call to [UnwrapKey](#unwrap-key) cannot support the precise template supplied to it, it will fail and return without creating any key object.
+
+The key object created by a successful call to [UnwrapKey](#unwrap-key) will have its `CKA_LOCAL` attribute set to `CK_FALSE`.
+
+To partition the unwrapping keys so they can only unwrap a subset of keys the attribute `CKA_UNWRAP_TEMPLATE` can be used on the unwrapping key to specify an attribute set that will be added to attributes of the key to be unwrapped. If the attributes do not conflict with the user supplied attribute template, in 'template', then the unwrap will proceed. The value of this attribute is an attribute template and the size is the number of items in the template times the size of `CK_ATTRIBUTE`. If this attribute is not present on the unwrapping key then no additional attributes will be added. If any attribute conflict occurs on an attempt to unwrap a key then the function shall return `CKR_TEMPLATE_INCONSISTENT`.
+
+**Request**
+
+| Name           | Type                                  | Representation | Description              |
+|----------------|---------------------------------------|----------------|--------------------------|
+| hSession       | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle           |
+| mechanism      | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Key unwrapping mechanism |
+| parameter      | octet-stream                          | bin 8/16/32    | Optional parameter       |
+| hUnwrappingKey | CK_OBJECT_HANDLE                      | uint 8/16/32   | Unwrapping key handle      |
+| wrappedKey     | octet-stream           | bin 8/16/32    | Serialized and wrapped key |
+
+**Response**
+
+| Name        | Type                                                                             | Representation | Description                       |
+|-------------|----------------------------------------------------------------------------------|----------------|-----------------------------------|
+| status      | [CK_RV](#return-value)                                                           | uint 8/16/32   | Return value                      |
+| template    | map of [CK_ATTRIBUTE_TYPE](#attribute-types) and octet-stream of attribute value | map 16/32      | Map of attribute and their values |
+| hKey        | CK_OBJECT_HANDLE                                                                 | uint 8/16/32   | Wrapped key handle                |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_READ_ONLY`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_ATTRIBUTE_VALUE_INVALID`
+- `CKR_BUFFER_TOO_SMALL`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_DOMAIN_PARAMS_INVALID`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TEMPLATE_INCOMPLETE`
+- `CKR_TEMPLATE_INCONSISTENT`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_UNWRAPPING_KEY_HANDLE_INVALID`
+- `CKR_UNWRAPPING_KEY_SIZE_RANGE`
+- `CKR_UNWRAPPING_KEY_TYPE_INCONSISTENT`
+- `CKR_USER_NOT_LOGGED_IN`
+- `CKR_WRAPPED_KEY_INVALID`
+- `CKR_WRAPPED_KEY_LEN_RANGE`
 
 #### Derive Key
 
