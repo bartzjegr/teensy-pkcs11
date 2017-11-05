@@ -2322,13 +2322,13 @@ The object created by a successful call to [GenerateKey](#generate-key) will hav
 | mechanism | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism   |
 | parameter | octet-stream                          | bin 8/16/32    | Optional parameter |
 | templates | array of [CK_ATTRIBUTE](#attributes)  | array 8/16     | List of templates  |
-| hKey      | CK_OBJECT_HANDLE                      | uint 8/16/32   | Key Handle         |
 
 **Response**
 
-| Name   | Type                   | Representation | Description         |
-|--------|------------------------|----------------|---------------------|
-| status | [CK_RV](#return-value) | uint 8/16/32   | Return value        |
+| Name   | Type                   | Representation | Description        |
+|--------|------------------------|----------------|--------------------|
+| status | [CK_RV](#return-value) | uint 8/16/32   | Return value       |
+| hKey   | CK_OBJECT_HANDLE        uint 8/16/32    | Created Key Handle |
 
 **Error Codes**
 
@@ -2358,6 +2358,62 @@ The object created by a successful call to [GenerateKey](#generate-key) will hav
 - `CKR_USER_NOT_LOGGED_IN`
 
 #### Generate Key Pair
+
+Generates a public/private key pair, creating new key objects.
+
+Since the types of keys to be generated are implicit in the key pair generation mechanism, the templates do not need to supply key types. If one of the templates does supply a key type which is inconsistent with the key generation mechanism, [GenerateKeyPair](#generate-key-pair) fails and returns the error code `CKR_TEMPLATE_INCONSISTENT`. The `CKA_CLASS` attribute is treated similarly.
+
+If a call to [GenerateKeyPair](#generate-key-pair) cannot support the precise templates supplied to it, it will fail and return without creating any key objects.
+
+A call to [GenerateKeyPair](#generate-key-pair) will never create just one key and return. A call can fail, and create no keys; or it can succeed, and create a matching public/private key pair.
+
+The key objects created by a successful call to [GenerateKeyPair](#generate-key-pair) will have their `CKA_LOCAL` attributes set to `CK_TRUE`.
+
+**Request**
+
+| Name                | Type                                  | Representation | Description                      |
+|---------------------|---------------------------------------|----------------|----------------------------------|
+| hSession            | CK_SESSION_HANDLE                     | uint 8/16/32   | Session handle                   |
+| mechanism           | [CK_MECHANISM_TYPE](#mechanism-codes) | uint 8/16/32   | Cipher mechanism                 |
+| parameter           | octet-stream                          | bin 8/16/32    | Optional parameter               |
+| publicKeyTemplates  | array of [CK_ATTRIBUTE](#attributes)  | array 8/16     | List of templates of public key  |
+| privateKeyTemplates | array of [CK_ATTRIBUTE](#attributes)  | array 8/16     | List of templates of private key |
+
+**Response**
+
+| Name        | Type                   | Representation | Description               |
+|-------------|------------------------|----------------|---------------------------|
+| status      | [CK_RV](#return-value) | uint 8/16/32   | Return value              |
+| hPublicKey  | CK_OBJECT_HANDLE        uint 8/16/32    | Created Public Key Handle |
+| hPrivateKey | CK_OBJECT_HANDLE        uint 8/16/32    | Created Priate Key Handle |
+
+**Error Codes**
+
+- `CKR_ARGUMENTS_BAD`
+- `CKR_ATTRIBUTE_READ_ONLY`
+- `CKR_ATTRIBUTE_TYPE_INVALID`
+- `CKR_ATTRIBUTE_VALUE_INVALID`
+- `CKR_CRYPTOKI_NOT_INITIALIZED`
+- `CKR_DEVICE_ERROR`
+- `CKR_DEVICE_MEMORY`
+- `CKR_DEVICE_REMOVED`
+- `CKR_DOMAIN_PARAMS_INVALID`
+- `CKR_FUNCTION_CANCELED`
+- `CKR_FUNCTION_FAILED`
+- `CKR_GENERAL_ERROR`
+- `CKR_HOST_MEMORY`
+- `CKR_MECHANISM_INVALID`
+- `CKR_MECHANISM_PARAM_INVALID`
+- `CKR_OK`
+- `CKR_OPERATION_ACTIVE`
+- `CKR_PIN_EXPIRED`
+- `CKR_SESSION_CLOSED`
+- `CKR_SESSION_HANDLE_INVALID`
+- `CKR_SESSION_READ_ONLY`
+- `CKR_TEMPLATE_INCOMPLETE`
+- `CKR_TEMPLATE_INCONSISTENT`
+- `CKR_TOKEN_WRITE_PROTECTED`
+- `CKR_USER_NOT_LOGGED_IN`
 
 #### Wrap Key
 
