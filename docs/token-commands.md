@@ -83,6 +83,7 @@ Commands are encoded in [msgpack](https://github.com/msgpack/msgpack/blob/master
     - [States](#states)
     - [User Types](#user-types)
     - [Object Classes](#object-classes)
+    - [Certificate Types](#certificate-types)
 
 ## Functions
 
@@ -3427,16 +3428,16 @@ Possible Values of `CK_MECHANISM_TYPE`
 
 Possible values of `CK_ATTRIBUTE_TYPE`
 
-| Code                                  | Value                             |
-|---------------------------------------|-----------------------------------|
-| `CKA_CLASS`                           | 0x00000000                        |
-| `CKA_TOKEN`                           | 0x00000001                        |
-| `CKA_PRIVATE`                         | 0x00000002                        |
-| `CKA_LABEL`                           | 0x00000003                        |
-| `CKA_APPLICATION`                     | 0x00000010                        |
-| `CKA_VALUE`                           | 0x00000011                        |
-| `CKA_OBJECT_ID`                       | 0x00000012                        |
-| `CKA_CERTIFICATE_TYPE`                | 0x00000080                        |
+| Code                                  | Value                             | Representation | Type            |
+|---------------------------------------|-----------------------------------|----------------|-----------------|
+| `CKA_CLASS`                           | 0x00000000                        | uint 8/16/32   | CK_OBJECT_CLASS |
+| `CKA_TOKEN`                           | 0x00000001                        | boolean        |                 |
+| `CKA_PRIVATE`                         | 0x00000002                        | ---            |                 |
+| `CKA_LABEL`                           | 0x00000003                        | bin 16/32      | String Label    |
+| `CKA_APPLICATION`                     | 0x00000010                        | ---            |                 |
+| `CKA_VALUE`                           | 0x00000011                        | bin 8/16/32    | Binary payload  |
+| `CKA_OBJECT_ID`                       | 0x00000012                        | bin 8/16/32    | ASN.1 object identifier |
+| `CKA_CERTIFICATE_TYPE`                | 0x00000080                        | uint 8/16/32   | [CK_CERTIFICATE_TYPE](#certificate-types) |
 | `CKA_ISSUER`                          | 0x00000081                        |
 | `CKA_SERIAL_NUMBER`                   | 0x00000082                        |
 | `CKA_AC_ISSUER`                       | 0x00000083                        |
@@ -3452,7 +3453,7 @@ Possible values of `CK_ATTRIBUTE_TYPE`
 | `CKA_KEY_TYPE`                        | 0x00000100                        |
 | `CKA_SUBJECT`                         | 0x00000101                        |
 | `CKA_ID`                              | 0x00000102                        |
-| `CKA_SENSITIVE`                       | 0x00000103                        |
+| `CKA_SENSITIVE`                       | 0x00000103                        | boolean |
 | `CKA_ENCRYPT`                         | 0x00000104                        |
 | `CKA_DECRYPT`                         | 0x00000105                        |
 | `CKA_WRAP`                            | 0x00000106                        |
@@ -3494,9 +3495,9 @@ Possible values of `CK_ATTRIBUTE_TYPE`
 | `CKA_ALWAYS_AUTHENTICATE`             | 0x00000202                        |
 | `CKA_AUTH_PIN_FLAGS`                  | 0x00000201                        |
 | `CKA_WRAP_WITH_TRUSTED`               | 0x00000210                        |
-| `CKA_WRAP_TEMPLATE`                   | (CKF_ARRAY_ATTRIBUTE&#124;0x00000211)  |
-| `CKA_UNWRAP_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE&#124;0x00000212)  |
-| `CKA_DERIVE_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE&#124;0x00000213)  |
+| `CKA_WRAP_TEMPLATE`                   | (CKF_ARRAY_ATTRIBUTE &#124; 0x00000211)  |
+| `CKA_UNWRAP_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE &#124; 0x00000212)  |
+| `CKA_DERIVE_TEMPLATE`                 | (CKF_ARRAY_ATTRIBUTE &#124; 0x00000213)  |
 | `CKA_OTP_FORMAT`                      | 0x00000220                        |
 | `CKA_OTP_LENGTH`                      | 0x00000221                        |
 | `CKA_OTP_TIME_INTERVAL`               | 0x00000222                        |
@@ -3531,7 +3532,7 @@ Possible values of `CK_ATTRIBUTE_TYPE`
 | `CKA_REQUIRED_CMS_ATTRIBUTES`         | 0x00000501                        |
 | `CKA_DEFAULT_CMS_ATTRIBUTES`          | 0x00000502                        |
 | `CKA_SUPPORTED_CMS_ATTRIBUTES`        | 0x00000503                        |
-| `CKA_ALLOWED_MECHANISMS`              | (CKF_ARRAY_ATTRIBUTE&#124;0x00000600)  |
+| `CKA_ALLOWED_MECHANISMS`              | (CKF_ARRAY_ATTRIBUTE &#124; 0x00000600)  |
 | `CKA_VENDOR_DEFINED`                  | 0x80000000                        |
 
 ### Flags
@@ -3599,3 +3600,14 @@ Possible values of `CK_OBJECT_CLASS`
 | `CKO_MECHANISM`         | 0x00000007 |
 | `CKO_OTP_KEY`           | 0x00000008 |
 | `CKO_VENDOR_DEFINED`    | 0x80000000 |
+
+### Certificate Types
+
+Possible Values of `CK_CERTIFICATE_TYPE`
+
+| Code                    | Value      |
+|-------------------------|------------|
+| `CKC_X_509`             | 0x00000000 |
+| `CKC_X_509_ATTR_CERT`   | 0x00000001 |
+| `CKC_WTLS`              | 0x00000002 |
+| `CKC_VENDOR_DEFINED`    | 0x80000000 |
